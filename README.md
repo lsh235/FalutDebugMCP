@@ -1,10 +1,24 @@
 # FaultDebug
 
-FaultDebug is a local C/C++ fault-evidence recorder and inspection toolkit. A
-small C11 runtime records bounded function-entry and function-exit events while
-an instrumented program runs. The Python launcher collects the shared-memory
-trace after the program exits, validates it, and writes a `.fault` artifact
-when a supported fatal signal or partial termination occurs.
+> Bounded C/C++ crash tracing with verified-source inspection. Capture runtime
+> events locally, inspect what was actually recorded, and keep missing evidence
+> visible.
+
+[![Latest release](https://img.shields.io/github/v/release/lsh235/FalutDebugMCP?include_prereleases&label=latest%20candidate)](https://github.com/lsh235/FalutDebugMCP/releases)
+[![Release gates](https://img.shields.io/github/actions/workflow/status/lsh235/FalutDebugMCP/v12-release-gate.yml?branch=main&label=release%20gates)](https://github.com/lsh235/FalutDebugMCP/actions/workflows/v12-release-gate.yml)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/)
+[![Clang 18](https://img.shields.io/badge/Clang-18-orange)](https://clang.llvm.org/)
+[![Apache--2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+
+**Guides:** [English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+
+FaultDebug combines a small C11 runtime, C/C++ build integration, and a Python
+CLI/MCP inspector. The runtime records bounded function-entry and function-exit
+events while an instrumented program runs. After the target exits, the local
+launcher collects and validates the shared-memory trace and may write a
+`.fault` artifact for a supported fatal signal or partial termination.
+
+![FaultDebug capture and inspection flow](docs/assets/faultdebug-overview.svg)
 
 FaultDebug is designed to preserve evidence and its limits. It does not guess
 missing events, infer causality from process names or shared IDs, or present
@@ -15,7 +29,8 @@ static call-graph candidates as observed execution.
 The current version is **1.2.0rc1** (Git tag `v1.2.0-rc.1`), published as a
 pre-release candidate. Local and GitHub-hosted core and gRPC profiles pass. An
 independent acceptance review has not run yet, and the 30-minute soak trace is
-incomplete with event loss. This candidate is not the final v1.2.0 release; see
+incomplete with 344,793 dropped events and 9,276 unstable snapshot records.
+This candidate is not the final v1.2.0 release; see
 the [v1.2 plan](docs/next-version-v1.2.md) and
 [validation report](docs/v1.2-p3-01.md) for scope and limits.
 
@@ -37,6 +52,20 @@ Normal successful runs do not write a fault artifact unless
 `--collect-success` is requested. A crash artifact may still be incomplete;
 check its trace, dropped-event, snapshot, and collector status before relying on
 it.
+
+## Why FaultDebug
+
+- Record function-level runtime events in a bounded C11 recorder without
+  requiring a tracing daemon or remote service.
+- Tie source lookup to captured build inputs, hashes, and module Build IDs so a
+  changed checkout is not mistaken for the source that produced an artifact.
+- Use a local CLI or read-only MCP server to inspect artifacts and explicitly
+  separate observed events, static candidates, and unresolved evidence.
+- Keep overflow, incomplete snapshots, and missing optional evidence visible.
+
+The runtime currently targets Linux on Ubuntu 24.04 x86_64. It is a diagnostic
+and forensic aid, not a lossless recorder: inspect artifact completeness and
+drop counts before drawing conclusions.
 
 ## Supported environment
 
