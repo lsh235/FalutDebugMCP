@@ -1,0 +1,14 @@
+include README.md LICENSE NOTICE pyproject.toml CMakeLists.txt
+recursive-include faultdebug *.py
+recursive-include include *.h
+recursive-include runtime *.c
+recursive-include cmake *.cmake
+recursive-include docs *.md
+recursive-include scripts *.sh *.py
+include scripts/faultdebug-cc scripts/faultdebug-cxx
+global-exclude __pycache__ *.py[cod]
+prune build
+prune build-clang
+prune build-clang-tests
+prune .tools
+prune .venv

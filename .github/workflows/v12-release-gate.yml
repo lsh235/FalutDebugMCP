@@ -1,0 +1,58 @@
+name: v1.2 required release gates
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  required-gates:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [core, grpc]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Clang 18 and build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            clang-18 llvm-18-tools cmake ninja-build
+      - name: Install optional gRPC profile dependencies
+        if: matrix.profile == 'grpc'
+        run: |
+          sudo apt-get install -y --no-install-recommends \
+            libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc
+      - name: Install package and gate dependencies
+        run: |
+          python -m pip install --disable-pip-version-check build
+          python -m pip install --disable-pip-version-check -e .
+      - name: Run required v1.2 gate profile
+        env:
+          CC: clang-18
+          CXX: clang++-18
+        run: |
+          python test/v12_release_gate.py \
+            --profile "${{ matrix.profile }}" \
+            --build-dir "build-v12-${{ matrix.profile }}" \
+            --install-prefix "build-v12-${{ matrix.profile }}/install" \
+            --work-dir "build-v12-${{ matrix.profile }}/release-work" \
+            --output "output/v12-${{ matrix.profile }}/report.json"
+      - name: Upload reports even when a required gate fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.2-${{ matrix.profile }}-gate-report
+          path: |
+            output/v12-${{ matrix.profile }}/
+            build-v12-${{ matrix.profile }}/release-work/v10/
+            build-v12-${{ matrix.profile }}/Testing/Temporary/LastTest.log
+          if-no-files-found: warn

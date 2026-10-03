@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -eu
+export FAULTDEBUG_REAL_CC="${FAULTDEBUG_REAL_CXX:-c++}"
+exec "$(dirname "$0")/faultdebug-cc" "$@"

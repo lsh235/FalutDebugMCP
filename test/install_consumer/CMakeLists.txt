@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.20)
+project(faultdebug_installed_consumer LANGUAGES C)
+
+find_package(faultdebug CONFIG REQUIRED)
+add_executable(faultdebug_installed_consumer main.c)
+faultdebug_instrument_existing(faultdebug_installed_consumer)

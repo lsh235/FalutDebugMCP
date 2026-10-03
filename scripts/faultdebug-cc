@@ -1,0 +1,107 @@
+#!/usr/bin/env sh
+set -eu
+
+# Compiler wrapper for Make/autotools and compiler-variable integrations.
+# Set FAULTDEBUG_REAL_CC and FAULTDEBUG_RUNTIME_DIR before invoking the build.
+if [ "${FAULTDEBUG_DISABLE_WRAPPER:-}" = 1 ]; then
+    exec "${FAULTDEBUG_REAL_CC:-cc}" "$@"
+fi
+real_cc=${FAULTDEBUG_REAL_CC:-cc}
+profile=${FAULTDEBUG_INSTRUMENT_PROFILE:-legacy}
+include_regex=${FAULTDEBUG_INSTRUMENT_INCLUDE_REGEX:-}
+exclude_regex=${FAULTDEBUG_INSTRUMENT_EXCLUDE_REGEX:-}
+case "$profile" in
+    legacy|minimal|recommended|full) ;;
+    *) echo "faultdebug-cc: invalid FAULTDEBUG_INSTRUMENT_PROFILE '$profile' (expected legacy, minimal, recommended, or full)" >&2; exit 2 ;;
+esac
+regex_is_valid() {
+    [ -z "$1" ] && return 0
+    if printf '\n' | grep -Eq "$1" >/dev/null 2>&1; then
+        return 0
+    else
+        status=$?
+        [ "$status" -eq 1 ]
+    fi
+}
+if ! regex_is_valid "$include_regex"; then
+    echo "faultdebug-cc: invalid FAULTDEBUG_INSTRUMENT_INCLUDE_REGEX" >&2
+    exit 2
+fi
+if ! regex_is_valid "$exclude_regex"; then
+    echo "faultdebug-cc: invalid FAULTDEBUG_INSTRUMENT_EXCLUDE_REGEX" >&2
+    exit 2
+fi
+instrument_source=1
+source_seen=0
+source_path=
+consider_source() {
+    source_path=$1
+    source_seen=1
+    case "$profile" in
+        minimal)
+            if [ -z "$include_regex" ] || ! printf '%s\n' "$source_path" | grep -Eq "$include_regex"; then
+                instrument_source=0
+            fi
+            ;;
+        legacy|recommended)
+            if [ -n "$include_regex" ] && ! printf '%s\n' "$source_path" | grep -Eq "$include_regex"; then
+                instrument_source=0
+            fi
+            ;;
+        full)
+            # Full opts into every source; an explicit exclude still applies.
+            ;;
+    esac
+    if [ "$profile" = recommended ] && printf '%s\n' "$source_path" | grep -Eq '(^|/)(generated|vendor)/'; then
+        instrument_source=0
+    fi
+    if [ -n "$exclude_regex" ] && printf '%s\n' "$source_path" | grep -Eq "$exclude_regex"; then
+        instrument_source=0
+    fi
+}
+for arg in "$@"; do
+    case "$arg" in
+        *.cc|*.cpp|*.cxx|*.C)
+            real_cc=${FAULTDEBUG_REAL_CXX:-c++}
+            consider_source "$arg"
+            ;;
+        *.c)
+            consider_source "$arg"
+            ;;
+    esac
+done
+is_compile=0
+for arg in "$@"; do
+    case "$arg" in
+        -c|-S|-E) is_compile=1 ;;
+    esac
+done
+if [ "$source_seen" -eq 1 ]; then
+    if [ "$instrument_source" -eq 1 ]; then decision=instrumented; else decision=excluded; fi
+    echo "faultdebug-cc: profile=$profile source=$source_path decision=$decision" >&2
+fi
+runtime_dir=${FAULTDEBUG_RUNTIME_DIR:-}
+compile_flags="-O0 -g -fno-optimize-sibling-calls -fno-lto -fno-omit-frame-pointer"
+if [ "$is_compile" -eq 1 ]; then
+    if [ "$source_seen" -eq 1 ] && [ "$instrument_source" -eq 1 ]; then
+        compile_flags="$compile_flags -finstrument-functions"
+    fi
+    exec "$real_cc" "$@" $compile_flags
+fi
+if [ -z "$runtime_dir" ]; then
+    echo "faultdebug-cc: FAULTDEBUG_RUNTIME_DIR is required for link steps" >&2
+    exit 2
+fi
+# Object-only link commands do not carry a source suffix from which the
+# language can be inferred. The caller must opt into a C++ (or other) linker
+# explicitly; this never changes compile-driver selection.
+if [ -n "${FAULTDEBUG_LINK_DRIVER:-}" ]; then
+    real_cc=$FAULTDEBUG_LINK_DRIVER
+fi
+if [ "$source_seen" -eq 1 ]; then
+    if [ "$instrument_source" -eq 1 ]; then
+        compile_flags="$compile_flags -finstrument-functions"
+    fi
+    exec "$real_cc" "$@" $compile_flags "-L$runtime_dir" "-Wl,-rpath,$runtime_dir" -Wl,--build-id=sha1 -lfaultdebug_runtime -ldl -pthread
+fi
+exec "$real_cc" "$@" "-L$runtime_dir" "-Wl,-rpath,$runtime_dir" -Wl,--build-id=sha1 -lfaultdebug_runtime -ldl -pthread

@@ -1,0 +1,1080 @@
+{
+  "benchmark": {
+    "binaries": {
+      "baseline": {
+        "path": "$WORK_DIR/baseline-runner",
+        "sha256": "59e2b23a46e1fa0b5a84eeb4909234a3a17af970f024cdc54906250cf48b89ff"
+      },
+      "instrumented": {
+        "path": "$WORK_DIR/instrumented-runner",
+        "sha256": "59e2b23a46e1fa0b5a84eeb4909234a3a17af970f024cdc54906250cf48b89ff"
+      }
+    },
+    "created_at": "2026-10-01T14:07:38.011193+00:00",
+    "host": {
+      "logical_cpu_count": 28,
+      "machine": "x86_64",
+      "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "python": "3.12.3"
+    },
+    "limitations": [
+      "PASS means all launched commands exited zero; it does not validate tracing or workload representativeness",
+      "throughput is a derived estimate and requires the caller-supplied operation count",
+      "loss_count only includes dropped_count fields exposed by decoded .fault artifacts",
+      "environment values are inherited and represented by a SHA-256 fingerprint, not serialized",
+      "host contention, thermal state, and frequency scaling can affect measurements"
+    ],
+    "measurement": "paired_process_benchmark",
+    "metric_availability": {
+      "artifact_size_bytes": {
+        "reason": "--artifact-dir and {artifact_dir} argument placeholder required",
+        "status": "NOT RUN",
+        "value": null
+      },
+      "cpu_time_ms": {
+        "method": "GNU /usr/bin/time user plus system CPU time",
+        "status": "PASS"
+      },
+      "loss_count": {
+        "reason": "--artifact-dir and {artifact_dir} argument placeholder required",
+        "status": "NOT RUN",
+        "value": null
+      },
+      "max_rss_bytes": {
+        "method": "GNU /usr/bin/time peak RSS",
+        "status": "PASS"
+      },
+      "throughput_ops_per_second": {
+        "method": "operations divided by wall time",
+        "status": "PASS"
+      },
+      "wall_time_ms": {
+        "method": "perf_counter_ns around process invocation",
+        "status": "PASS"
+      }
+    },
+    "protocol": {
+      "arguments": [],
+      "artifact_base_directory": null,
+      "artifact_directory_template": null,
+      "environment_sha256": "10ce4932700c169f536777a85f438fd68c4d99eeedaa3ccf3ffdce5ad93ea863",
+      "operations_per_invocation": 48000,
+      "order": "alternating; baseline first on odd pairs",
+      "repeats": 7,
+      "stdout": "discarded",
+      "timeout_seconds": 30.0,
+      "warmups_per_target": 2,
+      "working_directory": "$REPO"
+    },
+    "report_path": "$WORK_DIR/benchmark-cli.json",
+    "run_id": "d48ce26dc2b24c43a9297de1a9ce246a",
+    "samples": [
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 70.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34594816
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 421460.2427860362
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.889746
+          }
+        },
+        "pair": 1,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 100.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75943936
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422082.88777574885
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.721739
+          }
+        },
+        "pair": 1,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 100.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75743232
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422481.64238048554
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.614404
+          }
+        },
+        "pair": 2,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 70.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34840576
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422207.2387519044
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.688245
+          }
+        },
+        "pair": 2,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 69.99999999999999
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34869248
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422048.77033804666
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.730932
+          }
+        },
+        "pair": 3,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 100.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75988992
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422383.4060765555
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.640828
+          }
+        },
+        "pair": 3,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 110.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75943936
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422390.7655241278
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.638848
+          }
+        },
+        "pair": 4,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 70.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34639872
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422271.4328748269
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.670962
+          }
+        },
+        "pair": 4,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 69.99999999999999
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34672640
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422121.61012272944
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.711307
+          }
+        },
+        "pair": 5,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 120.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75968512
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 293031.30352686066
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 163.805025
+          }
+        },
+        "pair": 5,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 100.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75894784
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422198.9795820088
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.690469
+          }
+        },
+        "pair": 6,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 69.99999999999999
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34709504
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 421801.6402916737
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.797566
+          }
+        },
+        "pair": 6,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 60.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34775040
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422254.47151650797
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.675528
+          }
+        },
+        "pair": 7,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 110.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75894784
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 421718.49178390903
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.820003
+          }
+        },
+        "pair": 7,
+        "phase": "measurement",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      }
+    ],
+    "schema": 1,
+    "schema_name": "faultdebug.benchmark",
+    "status": "PASS",
+    "summary": {
+      "instrumented_to_baseline_wall_time_p50_ratio": 0.9998167464560054,
+      "interpretation": "descriptive for this workload and host only",
+      "targets": {
+        "baseline": {
+          "artifact_size_bytes": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_time_ms": {
+            "p50": 69.99999999999999,
+            "p95": 70.0,
+            "p99": 70.0
+          },
+          "failed_runs": 0,
+          "loss_count": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "max_rss_bytes": {
+            "p50": 34709504,
+            "p95": 34869248,
+            "p99": 34869248
+          },
+          "successful_runs": 7,
+          "throughput_ops_per_second": {
+            "p50": 422121.61012272944,
+            "p95": 422271.4328748269,
+            "p99": 422271.4328748269
+          },
+          "wall_time_ms": {
+            "max": 113.889746,
+            "min": 113.670962,
+            "p50": 113.711307,
+            "p95": 113.889746,
+            "p99": 113.889746
+          }
+        },
+        "instrumented": {
+          "artifact_size_bytes": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_time_ms": {
+            "p50": 100.0,
+            "p95": 120.0,
+            "p99": 120.0
+          },
+          "failed_runs": 0,
+          "loss_count": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "max_rss_bytes": {
+            "p50": 75943936,
+            "p95": 75988992,
+            "p99": 75988992
+          },
+          "successful_runs": 7,
+          "throughput_ops_per_second": {
+            "p50": 422198.9795820088,
+            "p95": 422481.64238048554,
+            "p99": 422481.64238048554
+          },
+          "wall_time_ms": {
+            "max": 163.805025,
+            "min": 113.614404,
+            "p50": 113.690469,
+            "p95": 163.805025,
+            "p99": 163.805025
+          }
+        }
+      }
+    },
+    "warmups": [
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 70.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34869248
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422218.8110460779
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.685129
+          }
+        },
+        "pair": 1,
+        "phase": "warmup",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 110.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75894784
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 421989.3479866321
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.746947
+          }
+        },
+        "pair": 1,
+        "phase": "warmup",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/instrumented-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 110.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 75943936
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422300.28071443393
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.663197
+          }
+        },
+        "pair": 2,
+        "phase": "warmup",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "instrumented"
+      },
+      {
+        "artifact_directory": null,
+        "command": [
+          "$WORK_DIR/baseline-runner"
+        ],
+        "metrics": {
+          "artifact_size_bytes": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "cpu_time_ms": {
+            "status": "PASS",
+            "value": 60.0
+          },
+          "loss_count": {
+            "reason": "pass --artifact-dir and use {artifact_dir} in command arguments",
+            "status": "NOT RUN",
+            "value": null
+          },
+          "max_rss_bytes": {
+            "status": "PASS",
+            "value": 34607104
+          },
+          "throughput_ops_per_second": {
+            "status": "PASS",
+            "value": 422758.07473647594
+          },
+          "wall_time_ms": {
+            "status": "PASS",
+            "value": 113.540114
+          }
+        },
+        "pair": 2,
+        "phase": "warmup",
+        "returncode": 0,
+        "status": "PASS",
+        "stderr_tail": "",
+        "target": "baseline"
+      }
+    ]
+  },
+  "benchmark_cli": {
+    "command": [
+      "/usr/bin/python3.12",
+      "-m",
+      "faultdebug.cli",
+      "benchmark",
+      "--baseline",
+      "$WORK_DIR/baseline-runner",
+      "--instrumented",
+      "$WORK_DIR/instrumented-runner",
+      "--repeats",
+      "7",
+      "--warmups",
+      "2",
+      "--timeout",
+      "30",
+      "--cwd",
+      "$REPO",
+      "--operations",
+      "48000",
+      "--output",
+      "$WORK_DIR/benchmark-cli.json",
+      "--"
+    ],
+    "cwd": "$REPO",
+    "duration_s": 2.146,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "  \"cpu_time_ms\": {\n          \"p50\": 100.0,\n          \"p95\": 120.0,\n          \"p99\": 120.0\n        },\n        \"failed_runs\": 0,\n        \"loss_count\": {\n          \"p50\": null,\n          \"p95\": null,\n          \"p99\": null\n        },\n        \"max_rss_bytes\": {\n          \"p50\": 75943936,\n          \"p95\": 75988992,\n          \"p99\": 75988992\n        },\n        \"successful_runs\": 7,\n        \"throughput_ops_per_second\": {\n          \"p50\": 422198.9795820088,\n          \"p95\": 422481.64238048554,\n          \"p99\": 422481.64238048554\n        },\n        \"wall_time_ms\": {\n          \"max\": 163.805025,\n          \"min\": 113.614404,\n          \"p50\": 113.690469,\n          \"p95\": 163.805025,\n          \"p99\": 163.805025\n        }\n      }\n    }\n  },\n  \"warmups\": [\n    {\n      \"artifact_directory\": null,\n      \"command\": [\n        \"$WORK_DIR/baseline-runner\"\n      ],\n      \"metrics\": {\n        \"artifact_size_bytes\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"cpu_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 70.0\n        },\n        \"loss_count\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"max_rss_bytes\": {\n          \"status\": \"PASS\",\n          \"value\": 34869248\n        },\n        \"throughput_ops_per_second\": {\n          \"status\": \"PASS\",\n          \"value\": 422218.8110460779\n        },\n        \"wall_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 113.685129\n        }\n      },\n      \"pair\": 1,\n      \"phase\": \"warmup\",\n      \"returncode\": 0,\n      \"status\": \"PASS\",\n      \"stderr_tail\": \"\",\n      \"target\": \"baseline\"\n    },\n    {\n      \"artifact_directory\": null,\n      \"command\": [\n        \"$WORK_DIR/instrumented-runner\"\n      ],\n      \"metrics\": {\n        \"artifact_size_bytes\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"cpu_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 110.0\n        },\n        \"loss_count\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"max_rss_bytes\": {\n          \"status\": \"PASS\",\n          \"value\": 75894784\n        },\n        \"throughput_ops_per_second\": {\n          \"status\": \"PASS\",\n          \"value\": 421989.3479866321\n        },\n        \"wall_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 113.746947\n        }\n      },\n      \"pair\": 1,\n      \"phase\": \"warmup\",\n      \"returncode\": 0,\n      \"status\": \"PASS\",\n      \"stderr_tail\": \"\",\n      \"target\": \"instrumented\"\n    },\n    {\n      \"artifact_directory\": null,\n      \"command\": [\n        \"$WORK_DIR/instrumented-runner\"\n      ],\n      \"metrics\": {\n        \"artifact_size_bytes\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"cpu_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 110.0\n        },\n        \"loss_count\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"max_rss_bytes\": {\n          \"status\": \"PASS\",\n          \"value\": 75943936\n        },\n        \"throughput_ops_per_second\": {\n          \"status\": \"PASS\",\n          \"value\": 422300.28071443393\n        },\n        \"wall_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 113.663197\n        }\n      },\n      \"pair\": 2,\n      \"phase\": \"warmup\",\n      \"returncode\": 0,\n      \"status\": \"PASS\",\n      \"stderr_tail\": \"\",\n      \"target\": \"instrumented\"\n    },\n    {\n      \"artifact_directory\": null,\n      \"command\": [\n        \"$WORK_DIR/baseline-runner\"\n      ],\n      \"metrics\": {\n        \"artifact_size_bytes\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"cpu_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 60.0\n        },\n        \"loss_count\": {\n          \"reason\": \"pass --artifact-dir and use {artifact_dir} in command arguments\",\n          \"status\": \"NOT RUN\",\n          \"value\": null\n        },\n        \"max_rss_bytes\": {\n          \"status\": \"PASS\",\n          \"value\": 34607104\n        },\n        \"throughput_ops_per_second\": {\n          \"status\": \"PASS\",\n          \"value\": 422758.07473647594\n        },\n        \"wall_time_ms\": {\n          \"status\": \"PASS\",\n          \"value\": 113.540114\n        }\n      },\n      \"pair\": 2,\n      \"phase\": \"warmup\",\n      \"returncode\": 0,\n      \"status\": \"PASS\",\n      \"stderr_tail\": \"\",\n      \"target\": \"baseline\"\n    }\n  ]\n}\n"
+  },
+  "benchmark_cli_report": {
+    "path": "$WORK_DIR/benchmark-cli.json",
+    "sha256": "1696baac713b0526f45ec16cb0ef4b162ae2b9ccb568dcc39386d7aae7de92f3"
+  },
+  "builds": {
+    "baseline": {
+      "binary": "$WORK_DIR/cpp-calls-baseline",
+      "build_id": "6c6dbb21c04cbc55b26c3587f70e40679f8b60e0",
+      "command": [
+        "$REPO/.tools/bin/clang++",
+        "-std=c++17",
+        "-O0",
+        "-g",
+        "-fno-optimize-sibling-calls",
+        "-fno-lto",
+        "-fno-omit-frame-pointer",
+        "-Wl,--build-id=sha1",
+        "$REPO/test/external/cpp_call_workload.cpp",
+        "-L",
+        "$REPO/build",
+        "-Wl,-rpath,$REPO/build",
+        "-lfaultdebug_runtime",
+        "-ldl",
+        "-pthread",
+        "-o",
+        "$WORK_DIR/cpp-calls-baseline"
+      ],
+      "cwd": "$REPO",
+      "duration_s": 0.121,
+      "instrumentation": "disabled; runtime linked",
+      "returncode": 0,
+      "sha256": "b3cbde4ab778933524cbc77138c83d50fa056f40bf295be1f91def551c3d4bc0",
+      "stderr": "",
+      "stdout": ""
+    },
+    "instrumented": {
+      "binary": "$WORK_DIR/cpp-calls-instrumented",
+      "build_id": "c28b289744043a6c77d65f1df9f1151c54ac03fc",
+      "command": [
+        "$REPO/scripts/faultdebug-cxx",
+        "-std=c++17",
+        "-O0",
+        "-g",
+        "-fno-optimize-sibling-calls",
+        "-fno-lto",
+        "-fno-omit-frame-pointer",
+        "-Wl,--build-id=sha1",
+        "$REPO/test/external/cpp_call_workload.cpp",
+        "-o",
+        "$WORK_DIR/cpp-calls-instrumented"
+      ],
+      "cwd": "$REPO",
+      "duration_s": 0.126,
+      "instrumentation": "enabled by scripts/faultdebug-cxx",
+      "returncode": 0,
+      "sha256": "78bb6900183cadb5c9b8e722a7c50d6b5271c143a7d9f5435251d647e23659a5",
+      "stderr": "faultdebug-cc: profile=legacy source=$REPO/test/external/cpp_call_workload.cpp decision=instrumented\n",
+      "stdout": ""
+    }
+  },
+  "direct_trace_check": {
+    "artifact_written": false,
+    "collector": {
+      "ok": true,
+      "partial": false,
+      "status": 1
+    },
+    "dropped_count": 0,
+    "event_records": 100290,
+    "expected_thread_records": 33,
+    "per_thread_event_count_max": 3040,
+    "per_thread_event_count_min": 3010,
+    "runtime_status_flags": 1,
+    "status": "PASS",
+    "target": {
+      "returncode": 0,
+      "signal": null
+    },
+    "thread_records": 33
+  },
+  "environment": {
+    "compiler": "Ubuntu clang version 18.1.3 (1ubuntu1)",
+    "git": "git version 2.43.0",
+    "machine": "x86_64",
+    "nm": "GNU nm (GNU Binutils for Ubuntu) 2.42",
+    "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "readelf": "GNU readelf (GNU Binutils for Ubuntu) 2.42",
+    "runtime_sha256": "287bcdc6f5da0ea20fb09a1cb3036f39d1885a5c870da9fb9bf07cb220554de7"
+  },
+  "instrumentation_hooks": {
+    "baseline": [],
+    "expected_instrumented": [
+      "__cyg_profile_func_enter",
+      "__cyg_profile_func_exit"
+    ],
+    "instrumented": [
+      "__cyg_profile_func_enter",
+      "__cyg_profile_func_exit"
+    ],
+    "status": "PASS"
+  },
+  "launchers": {
+    "baseline_runner_sha256": "59e2b23a46e1fa0b5a84eeb4909234a3a17af970f024cdc54906250cf48b89ff",
+    "instrumented_runner_sha256": "59e2b23a46e1fa0b5a84eeb4909234a3a17af970f024cdc54906250cf48b89ff",
+    "sha256": "59e2b23a46e1fa0b5a84eeb4909234a3a17af970f024cdc54906250cf48b89ff",
+    "source": "$REPO/test/external/cpp_call_benchmark_launcher.sh"
+  },
+  "limitations": [
+    "Measurements are descriptive for this workload and host; no pass threshold is applied.",
+    "Measured process time includes the faultdebug run launcher and collector handshake for both variants.",
+    "The baseline links the runtime to use the same launcher handshake but compiles the workload without function instrumentation.",
+    "This microbenchmark does not represent arbitrary application mixes or fault-path cost."
+  ],
+  "schema": 1,
+  "schema_name": "faultdebug.cpp_call_benchmark_evidence",
+  "smoke_checks": {
+    "baseline": {
+      "collector_ok": true,
+      "command": [
+        "/usr/bin/python3.12",
+        "-m",
+        "faultdebug.cli",
+        "run",
+        "--",
+        "$WORK_DIR/cpp-calls-baseline"
+      ],
+      "cwd": "$REPO",
+      "duration_s": 0.069,
+      "no_overflow_or_partial_flags": true,
+      "returncode": 0,
+      "runtime_status_flags": 1,
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "threads=32 iterations_per_thread=500 function_calls=48000 checksum=9655063894456135093\n{\"artifact\": null, \"collector\": {\"ok\": true, \"partial\": false, \"status\": 1}, \"target\": {\"returncode\": 0, \"signal\": null}}\n",
+      "target_output": "threads=32 iterations_per_thread=500 function_calls=48000 checksum=9655063894456135093"
+    },
+    "instrumented": {
+      "collector_ok": true,
+      "command": [
+        "/usr/bin/python3.12",
+        "-m",
+        "faultdebug.cli",
+        "run",
+        "--",
+        "$WORK_DIR/cpp-calls-instrumented"
+      ],
+      "cwd": "$REPO",
+      "duration_s": 0.105,
+      "no_overflow_or_partial_flags": true,
+      "returncode": 0,
+      "runtime_status_flags": 1,
+      "status": "PASS",
+      "stderr": "",
+      "stdout": "threads=32 iterations_per_thread=500 function_calls=48000 checksum=9655063894456135093\n{\"artifact\": null, \"collector\": {\"ok\": true, \"partial\": false, \"status\": 1}, \"target\": {\"returncode\": 0, \"signal\": null}}\n",
+      "target_output": "threads=32 iterations_per_thread=500 function_calls=48000 checksum=9655063894456135093"
+    },
+    "same_workload_output": {
+      "expected": "threads=32 iterations_per_thread=500 function_calls=48000 checksum=9655063894456135093",
+      "status": "PASS"
+    }
+  },
+  "status": "PASS",
+  "status_interpretation": "PASS means the declared baseline and instrumented commands completed successfully; the timing values are descriptive and no speed/overhead threshold was applied.",
+  "workload": {
+    "description": "fixed non-faulting C++ call chain with a synchronized 32-worker start: worker -> step -> combine -> leaf",
+    "functions_per_iteration": 3,
+    "iterations_per_thread": 500,
+    "operations_per_invocation": 48000,
+    "source": "$REPO/test/external/cpp_call_workload.cpp",
+    "source_sha256": "e7cf67e81305ed166d6eb072cf98b7e06487e8921e1b66448e031030539b65dd",
+    "threads": 32
+  }
+}

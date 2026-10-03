@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "faultdebug"
+version = "1.1.0"
+description = "Post-exit collector and source-backed inspection for faultdebug runtime traces"
+requires-python = ">=3.12,<3.13"
+license = { text = "Apache-2.0" }
+dependencies = [
+  "libclang==18.1.1",
+  "pyelftools==0.31",
+  "mcp==1.9.4",
+]
+
+[project.scripts]
+faultdebug = "faultdebug.cli:main"
+fault-debug = "faultdebug.cli:main"
+faultdebug-collector = "faultdebug.collector:main"
+faultdebug-agent = "faultdebug.agent:main"
+
+[tool.setuptools]
+script-files = ["scripts/faultdebug-cc", "scripts/faultdebug-cxx"]
+
+[tool.setuptools.packages.find]
+include = ["faultdebug*"]

@@ -1,0 +1,31 @@
+package(default_visibility = ["//visibility:public"])
+
+# Minimal wrapper adoption fixture: produce an object so this target exercises
+# compiler selection and path-based instrumentation without inventing a
+# repository-wide Bazel C++ toolchain. Link/runtime integration remains a
+# separate toolchain concern.
+genrule(
+    name = "instrumented_object",
+    srcs = ["src/main.c"],
+    outs = ["instrumented.o"],
+    tools = ["//:faultdebug_cc"],
+    cmd = "FAULTDEBUG_REAL_CC=$${CC:-cc} " +
+          "FAULTDEBUG_INSTRUMENT_INCLUDE_REGEX='src/' " +
+          "$(location :faultdebug_cc) -c $(location :src/main.c) -o $@",
+)
+
+genrule(
+    name = "excluded_object",
+    srcs = ["generated/ignored.c"],
+    outs = ["excluded.o"],
+    tools = ["//:faultdebug_cc"],
+    cmd = "FAULTDEBUG_REAL_CC=$${CC:-cc} " +
+          "FAULTDEBUG_INSTRUMENT_INCLUDE_REGEX='.' " +
+          "FAULTDEBUG_INSTRUMENT_EXCLUDE_REGEX='generated/' " +
+          "$(location :faultdebug_cc) -c $(location :generated/ignored.c) -o $@",
+)
+
+filegroup(
+    name = "faultdebug_cc",
+    srcs = ["faultdebug-cc"],
+)

@@ -1,0 +1,85 @@
+name: external fmt evaluation
+
+"on":
+  workflow_dispatch:
+    inputs:
+      fmt_source:
+        description: Optional existing fmt clone path for the v0.2.0 runner
+        required: false
+        type: string
+      fmt_original_build:
+        description: Optional original fmt build path for the v0.2.0 runner
+        required: false
+        type: string
+      fmt_instrumented_build:
+        description: Optional instrumented fmt build path for the v0.2.0 runner
+        required: false
+        type: string
+      faultdebug_runtime_dir:
+        description: Optional directory containing libfaultdebug_runtime.so
+        required: false
+        type: string
+  schedule:
+    - cron: '17 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  fmt-11-1-4:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install evaluation dependencies
+        continue-on-error: true
+        run: python -m pip install --disable-pip-version-check -e .
+      - name: Install Clang 18 when apt is available
+        continue-on-error: true
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang-18 llvm-18-tools cmake ninja-build
+      - name: Run bounded fmt evaluation
+        run: |
+          mkdir -p "$RUNNER_TEMP/faultdebug-fmt"
+          FAULTDEBUG_FMT_REPORT="$RUNNER_TEMP/faultdebug-fmt/report.json" \
+            FAULTDEBUG_FMT_WORK="$RUNNER_TEMP/faultdebug-fmt/work" \
+            scripts/evaluate_fmt.sh
+      - name: Upload evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fmt-11.1.4-evaluation
+          path: ${{ runner.temp }}/faultdebug-fmt/report.json
+          if-no-files-found: warn
+      - name: Run v0.2.0 timing and signal matrix
+        if: always()
+        env:
+          FMT_SOURCE_INPUT: ${{ inputs.fmt_source || env.FAULTDEBUG_FMT_V020_SOURCE }}
+          FMT_ORIGINAL_BUILD_INPUT: ${{ inputs.fmt_original_build || env.FAULTDEBUG_FMT_V020_ORIGINAL_BUILD }}
+          FMT_INSTRUMENTED_BUILD_INPUT: ${{ inputs.fmt_instrumented_build || env.FAULTDEBUG_FMT_V020_INSTRUMENTED_BUILD }}
+          RUNTIME_DIR_INPUT: ${{ inputs.faultdebug_runtime_dir || env.FAULTDEBUG_FMT_V020_RUNTIME_DIR }}
+        run: |
+          set +e
+          report_dir="$RUNNER_TEMP/faultdebug-fmt-v020"
+          mkdir -p "$report_dir"
+          args=(--output "$report_dir/report.json" --work-dir "$report_dir/work" --repeats 3)
+          [[ -n "${FMT_SOURCE_INPUT:-}" ]] && args+=(--source "$FMT_SOURCE_INPUT")
+          [[ -n "${FMT_ORIGINAL_BUILD_INPUT:-}" ]] && args+=(--original-build "$FMT_ORIGINAL_BUILD_INPUT")
+          [[ -n "${FMT_INSTRUMENTED_BUILD_INPUT:-}" ]] && args+=(--instrumented-build "$FMT_INSTRUMENTED_BUILD_INPUT")
+          [[ -n "${RUNTIME_DIR_INPUT:-}" ]] && args+=(--runtime-dir "$RUNTIME_DIR_INPUT")
+          python test/external_fmt_v020.py "${args[@]}"
+          rc=$?
+          echo "v0.2.0 runner exit=$rc; report=$report_dir/report.json"
+          # rc=0 covers PASS and an explicit NOT RUN.  Preserve FAIL and
+          # abnormal exits so the workflow cannot turn a failed gate green.
+          exit "$rc"
+      - name: Upload v0.2.0 report and raw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fmt-11.1.4-v020
+          path: ${{ runner.temp }}/faultdebug-fmt-v020
+          if-no-files-found: warn

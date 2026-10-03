@@ -1,0 +1,1 @@
+module(name = "faultdebug_build_integration_fixture", version = "1.1.0")

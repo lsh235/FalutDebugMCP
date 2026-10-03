@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package faultdebug.test;
+
+message EchoRequest {
+  string message = 1;
+  uint64 rpc_id = 2;
+  uint64 trace_id_hi = 3;
+  uint64 trace_id_lo = 4;
+}
+
+message EchoReply {
+  string message = 1;
+}
+
+service Echo {
+  rpc Forward(EchoRequest) returns (EchoReply);
+  rpc Stream(EchoRequest) returns (stream EchoReply);
+}
