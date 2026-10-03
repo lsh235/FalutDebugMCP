@@ -4,7 +4,9 @@
 
 This work is in development; package and native project version remain 1.1.0.
 Local core and gRPC profiles pass, while hosted release CI and the independent
-acceptance review remain `NOT RUN`.
+acceptance review remain separate gates. The first GitHub-hosted core and gRPC
+release workflow run passed on 2026-10-03; the independent acceptance review
+remains `NOT RUN`.
 
 - Corrected decoded event ordering when a per-thread ring wraps, and added
   bounded collector, snapshot-consistency, and long-soak telemetry contracts.

@@ -14,10 +14,10 @@ static call-graph candidates as observed execution.
 
 The package and native project version remain **1.1.0**. Work toward v1.2 is in
 progress; this source tree is not a v1.2 release. Local core and gRPC release
-profiles and the 30-minute soak have passed. GitHub-hosted release CI and an
-independent acceptance review have not run yet. The soak trace was incomplete
-and records event loss; see the [v1.2 plan](docs/next-version-v1.2.md) and
-[validation report](docs/v1.2-p3-01.md) for scope and limits.
+profiles, both GitHub-hosted required profiles, and the 30-minute soak have
+passed. An independent acceptance review has not run yet. The soak trace was
+incomplete and records event loss; see the [v1.2 plan](docs/next-version-v1.2.md)
+and [validation report](docs/v1.2-p3-01.md) for scope and limits.
 
 ## What it provides
 
