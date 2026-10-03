@@ -12,12 +12,12 @@ static call-graph candidates as observed execution.
 
 ## Project status
 
-The package and native project version remain **1.1.0**. Work toward v1.2 is in
-progress; this source tree is not a v1.2 release. Local core and gRPC release
-profiles, both GitHub-hosted required profiles, and the 30-minute soak have
-passed. An independent acceptance review has not run yet. The soak trace was
-incomplete and records event loss; see the [v1.2 plan](docs/next-version-v1.2.md)
-and [validation report](docs/v1.2-p3-01.md) for scope and limits.
+The current version is **1.2.0rc1** (Git tag `v1.2.0-rc.1`), published as a
+pre-release candidate. Local and GitHub-hosted core and gRPC profiles pass. An
+independent acceptance review has not run yet, and the 30-minute soak trace is
+incomplete with event loss. This candidate is not the final v1.2.0 release; see
+the [v1.2 plan](docs/next-version-v1.2.md) and
+[validation report](docs/v1.2-p3-01.md) for scope and limits.
 
 ## What it provides
 

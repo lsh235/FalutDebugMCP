@@ -18,6 +18,9 @@ import venv
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from faultdebug import __version__ as PACKAGE_VERSION  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_V10 = ("install_consumer", "capability_cli", "mcp_capabilities_store",
                 "store_compatibility", "native_ctest", "package_metadata")
@@ -399,14 +402,14 @@ def main() -> int:
         checks.append(_result("installed_wheel_consumer", "NOT RUN", "native build failed"))
     statuses = [row["status"] for row in checks]
     status = "FAIL" if "FAIL" in statuses else ("NOT RUN" if "NOT RUN" in statuses else "PASS")
-    report = {"schema": 1, "schema_name": "faultdebug.v1_2_release_gate", "version": "1.1.0",
+    report = {"schema": 1, "schema_name": "faultdebug.v1_2_release_gate", "version": PACKAGE_VERSION,
               "profile": ns.profile, "status": status,
               "configuration": {"source": str(ROOT), "build_dir": str(build_dir),
                                 "install_prefix": str(install_prefix), "work_dir": str(work),
                                 "python": str(ns.python.absolute()), "cc": ns.cc, "cxx": ns.cxx,
                                 "provenance_enabled": True, "grpc_enabled": grpc_enabled},
               "checks": checks,
-              "acceptance_note": "This development gate intentionally leaves the package version at 1.1.0; version promotion belongs to P4."}
+              "acceptance_note": "This is a v1.2.0 release candidate; independent P4 acceptance remains pending."}
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"status": status, "report": str(output)}, sort_keys=True))
     return {"PASS": 0, "FAIL": 1, "NOT RUN": 2}[status]

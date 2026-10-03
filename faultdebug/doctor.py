@@ -12,6 +12,8 @@ import sysconfig
 from pathlib import Path
 from typing import Any
 
+from . import __version__ as PACKAGE_VERSION
+
 
 def _check(name: str, status: str, message: str, **details: Any) -> dict[str, Any]:
     return {"name": name, "status": status, "message": message, **details}
@@ -230,7 +232,7 @@ def collect_doctor_report() -> dict[str, Any]:
     return {
         "schema": 1,
         "schema_name": "faultdebug.doctor",
-        "version": "1.1.0",
+        "version": PACKAGE_VERSION,
         "status": overall,
         "environment": {"platform": platform.platform(), "system": platform.system(),
                          "machine": platform.machine(), "python": sys.version},

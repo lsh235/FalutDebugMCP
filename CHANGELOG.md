@@ -1,12 +1,11 @@
 # Changelog
 
-## Unreleased — v1.2 development
+## [1.2.0-rc.1] - 2026-10-03
 
-This work is in development; package and native project version remain 1.1.0.
-Local core and gRPC profiles pass, while hosted release CI and the independent
-acceptance review remain separate gates. The first GitHub-hosted core and gRPC
-release workflow run passed on 2026-10-03; the independent acceptance review
-remains `NOT RUN`.
+This pre-release candidate uses Python package version `1.2.0rc1` and native
+project version `1.2.0`. Local and GitHub-hosted core and gRPC release profiles
+pass. The independent acceptance review remains `NOT RUN`; this candidate does
+not indicate final v1.2.0 release acceptance.
 
 - Corrected decoded event ordering when a per-thread ring wraps, and added
   bounded collector, snapshot-consistency, and long-soak telemetry contracts.

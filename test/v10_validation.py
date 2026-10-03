@@ -32,6 +32,7 @@ from faultdebug.artifact import read_artifact, write_artifact  # noqa: E402
 from faultdebug.bundle import create_bundle, load_bundle  # noqa: E402
 from faultdebug.evidence_store import EvidenceStore, SCHEMA_VERSION  # noqa: E402
 from faultdebug.aggregate import ArtifactIndex  # noqa: E402
+from faultdebug import __version__ as PACKAGE_VERSION  # noqa: E402
 
 
 def result(name: str, status: str, reason: str, **extra: Any) -> dict[str, Any]:
@@ -416,10 +417,10 @@ def _package_metadata() -> dict[str, Any]:
         version = str(project.get("version", ""))
         scripts = project.get("scripts", {})
         expected_scripts = {"faultdebug", "fault-debug", "faultdebug-collector", "faultdebug-agent"}
-        valid = (version == "1.1.0" and project.get("requires-python") == ">=3.12,<3.13"
+        valid = (version == PACKAGE_VERSION and project.get("requires-python") == ">=3.12,<3.13"
                  and expected_scripts <= set(scripts))
         return result("package_metadata", "PASS" if valid else "FAIL",
-                      "package metadata declares the v1.1 contract" if valid else "package metadata is not v1.1 compatible",
+                      "package metadata matches the source version and required contract" if valid else "package metadata is inconsistent",
                       version=version, requires_python=project.get("requires-python"),
                       scripts=sorted(scripts), metadata=str(metadata_path))
     except (OSError, KeyError, TypeError, tomllib.TOMLDecodeError) as exc:
@@ -471,7 +472,7 @@ def main() -> int:
         hashes = {"fixture_artifact": _sha256(artifact), "malformed_fixture": _sha256(malformed)}
     statuses = [row["status"] for row in checks]
     overall = "FAIL" if "FAIL" in statuses else ("NOT RUN" if "NOT RUN" in statuses else "PASS")
-    report = {"schema": 1, "version": "1.1.0", "status": overall,
+    report = {"schema": 1, "version": PACKAGE_VERSION, "status": overall,
               "tool_versions": _versions(),
               "configuration": {"build_dir": str(ns.build_dir), "install_prefix": str(ns.install_prefix),
                                 "ctest_dir": str(ns.ctest_dir), "grpc_build_dir": str(ns.grpc_build_dir) if ns.grpc_build_dir else None,

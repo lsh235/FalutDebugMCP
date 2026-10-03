@@ -73,7 +73,7 @@ fault artifact를 만들지 않는 계약을 유지한다.
 | P2-01 / 높음 | collector/agent 담당: bounded 대기·snapshot 계약 | `faultdebug/collector.py`, `faultdebug/agent.py`, `faultdebug/format.py`, agent/collector 테스트·문서 | P1-01. `format.py` 변경은 decoder 담당과 순차 통합 | readiness 미전송·요청 없이 연결 유지에도 선언한 deadline 안에 종료/응답. 정상 후속 요청과 서버 종료 성공, FD/process 누수 없음. 동시 wrap·slot reuse·RPC writer stress에서 불안정 기록은 partial/unresolved로 보존하고 잘못된 trusted 결과 없음 | **DONE** — 미전송 readiness와 idle socket hang 재현·수정. synthetic race contract, live native event/RPC writer stress, agent integration, 전체 CTest 18/18. 상세: [P2-01 결과](v1.2-p2-01.md) |
 | P2-02 / 보통 | performance 담당: 호출별 정상 종료 telemetry·workload 측정 | `faultdebug/benchmark.py`, `faultdebug/run.py`의 측정 전용 opt-in 수집, `test/external/cpp_call_benchmark_v1_1.py`, benchmark docs/tests | P1-01, P1-02; collector 연계 변경은 P2-01 담당과 순차 통합 | 각 측정의 run/target/pair와 loss·overflow·partial 연결. process 시간과 workload 시간 분리. 독립 operation/checksum 검증. 고의 overflow에 loss 표시. 미가용 값은 `NOT RUN` | **DONE** — schema 2의 run/sample/artifact 식별자, opt-in 정상 종료 artifact, 독립 checksum, clean·overflow matrix 모두 검증. 상세: [P2-02 결과](v1.2-p2-02.md) |
 | P2-03 / 보통 | external 담당: portable libuv 재현·성능·실제 stdio 평가 | `test/external/libuv_v1_48_0.py`, `test/external/compare_libuv_runs.py`, external docs | P1-03, P2-02 | pinned libuv `e9f29cb984231524e3931aa0ae2c5dae1a32884e`의 별도 두 실행 비교. source/Build-ID/hash·signal·진단 의미 비교. PID/ASLR/시각/측정 변동은 사전 선언한 규칙 적용. 자료 archive/hash 검증. 외부 artifact로 필수 MCP 도구의 실제 stdio 성공·오류 경로 검사 | **DONE** — clean snapshot의 독립 평가 2회, normalized debug-prefix reproducibility, semantic comparator 12/12, evidence tar/hash, MCP stdio 다섯 성공 도구와 path-error 검증. 상세: [P2-03 결과](v1.2-p2-03.md) |
-| P3-01 / 높음 | CI/package 담당: 전체 gate·installed wheel 소비자 | `.github/workflows/ci.yml`, 신규 scheduled/manual gate, release runner, `docs/clang18-ci.md` | P1 작업 안정화; P2 결과 연결 | provenance ON 빌드, named CTest, installed C/C++와 checkout 없이 설치한 wheel CLI/MCP, doctor/tooling/호환성 실행. 필수 row의 FAIL·NOT RUN은 release 실패. 실패 시에도 reports 업로드 | **IN PROGRESS** — 최신 소스의 동일한 195-file provenance snapshot으로 로컬 core 20/20 및 gRPC 21/21 CTest profile PASS; 설치 wheel 소비자도 양쪽 PASS. Hosted GitHub Actions 실행·artifact 업로드는 **NOT RUN**. 상세 및 raw report: [P3-01 결과](v1.2-p3-01.md) |
+| P3-01 / 높음 | CI/package 담당: 전체 gate·installed wheel 소비자 | `.github/workflows/ci.yml`, 신규 scheduled/manual gate, release runner, `docs/clang18-ci.md` | P1 작업 안정화; P2 결과 연결 | provenance ON 빌드, named CTest, installed C/C++와 checkout 없이 설치한 wheel CLI/MCP, doctor/tooling/호환성 실행. 필수 row의 FAIL·NOT RUN은 release 실패. 실패 시에도 reports 업로드 | **GATES PASS** — 동일한 196-file provenance snapshot의 로컬·hosted core/grpc profiles 및 report artifact 업로드 PASS. 독립 acceptance audit은 별도 P4 gate. 상세: [P3-01 결과](v1.2-p3-01.md) |
 | P4 / 릴리스 | 통합 담당 + 독립 read-only reviewer: 최종 검증·버전 정합 | 버전 파일, `CHANGELOG.md`, `ROADMAP.md`, release evidence | 모든 필수 작업 | 아래 릴리스 gate 충족, 독립 감사 PASS, source/report/docs 일치 | WAITING |
 
 P1-02, P1-03은 소유 파일을 나누어 병렬 진행할 수 있다. 이후 decoder와
@@ -87,12 +87,13 @@ collector 변경을 통합한 뒤 성능·외부 평가를 진행한다. CI 뼈�
    P1-03 negative/MCP/runner 계약 검증도 통과했다. 새 성능 수치는 아직 채택하지 않았다.
 2. **M2: 수집과 측정 신뢰성. DONE.** P2-01 bounded collection/live snapshot
    consistency와 P2-02 정상 종료 telemetry, 호출별 결과·loss 연결을 검증했다.
-3. **M3: 다른 환경에서 재현. IN PROGRESS.** P2-03의 clean source snapshot + pinned
+3. **M3: 다른 환경에서 재현. DONE.** P2-03의 clean source snapshot + pinned
    libuv 독립 비교와 stdio 경로, P3-01 core/grpc release profiles와 installed-wheel
-   gate는 로컬에서 완료했다. 두 profile의 195-file provenance manifest가
-   동일한지 raw source snapshot으로 대조한다. GitHub-hosted workflow 실행과
-   Actions artifact 확인은 **NOT RUN**이다.
-4. **M4: v1.2 수락.** 최종 revision에서 gate를 실행하고 독립 감사를 받는다.
+   gate는 로컬과 GitHub-hosted 환경에서 완료했다. 두 profile의 196-file
+   provenance manifest가 raw source snapshot 기준으로 일치하며 hosted report
+   artifacts도 보존됐다. 독립 acceptance audit은 M4에 남아 있다.
+4. **M4: v1.2 수락. IN PROGRESS.** `v1.2.0-rc.1` 후보판을 발행했다. 최종
+   stable release 전 독립 read-only 감사를 받고 미완료 gate를 해소한다.
 
 P3 release runner는 실행 전에 필수/선택 **하위 gate 목록**을 고정한다.
 core profile은 gRPC 빌드를 끄고 설치·MCP·ABI·collector·store·tooling 등 모든 core
@@ -138,23 +139,25 @@ process 시간과 workload 시간을 각각 보고하고 작은 표본의 tail p
 - package wheel/sdist 및 checkout 없는 소비자 검증, 문서·보고서·배포 버전 일치,
   구현자와 분리한 감사 `PASS`.
 
-작업 중 `1.1.0` 릴리스 번호는 유지한다. 기능/검증 완료 뒤 `pyproject.toml`,
+최종 stable 수락 전까지 v1.2.0 release-candidate 식별자를 유지한다.
+기능/검증 완료 뒤 `pyproject.toml`,
 `CMakeLists.txt`, `faultdebug/__init__.py`, gate의 고정 버전(`test/v10_validation.py`),
 capabilities 및 관련 문서/테스트의 실제 버전 사용을 함께 점검한다.
 새 릴리스 표기는 수락 단계에서 정합성을 검증한다.
 
 ## 5. 다음 구현 작업
 
-P1-01/02/03과 P2-01/02/03은 완료했고 M1과 M2는 닫았다. wrapped-ring event ordering
-수정 이후 CTest, 517회 acceptance, 1800초 soak가 통과했다. P3-01의 전체 gate와
-installed-wheel 소비자는 동일 provenance snapshot의 로컬 core/grpc profiles에서 통과했다. M3는 hosted Actions
-실행 및 report artifact 확인이 남아 있고, P4 독립 read-only audit도 남았다.
+P1-01/02/03과 P2-01/02/03은 완료했고 M1, M2, M3를 닫았다. wrapped-ring event
+ordering 수정 이후 CTest, 517회 acceptance, 1800초 soak가 통과했다. P3-01의 전체
+gate와 installed-wheel 소비자는 동일 provenance snapshot의 로컬·hosted core/grpc
+profiles에서 통과했다. `v1.2.0-rc.1`을 발행했다. 최종 stable release 전 P4 독립
+read-only audit이 남아 있다.
 P2-03 pinned libuv 독립 비교와 MCP stdio evidence는
 [구현 결과](v1.2-p2-03.md)에 기록했다. P2-01
 재현·수정·stress 증거는 [구현 결과](v1.2-p2-01.md)에, P2-02 측정과 호출별
 loss 증거는 [구현 결과](v1.2-p2-02.md)에, P1-03 상세 판정과 raw report 경로는
-[구현 결과](v1.2-p1-03.md)에 기록했다. 1800초 soak는 이번 작업에 포함하지 않았고
-최종 release gate에서 새 revision으로 실행한다.
+[구현 결과](v1.2-p1-03.md)에 기록했다. 1800초 soak evidence 및 손실 제한은
+[P3-01 보고서](v1.2-p3-01.md)에 기록했다.
 
 P1-02의 초기 handoff는 완료 기록으로 보존한다:
 

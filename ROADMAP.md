@@ -23,18 +23,17 @@ and observed failures are in [docs/v1.2-baseline.md](docs/v1.2-baseline.md).
    source/runtime/archive hashes, Build-IDs, SIGABRT and source diagnostics; all
    required MCP calls and the expected path-error passed over stdio. Both
    evidence archives passed member/hash verification.
-5. **P3-01 local gate and current-source soak pass; hosted evidence pending.** Both
-   local core and gRPC release profiles pass, including checkout-free wheel CLI/MCP
-   consumers. The current-source 1800-second soak passed its target, telemetry, and
-   independent structural oracle checks, while preserving an explicitly incomplete
-   trace with recorded loss. The scheduled/manual GitHub Actions workflow has not run
-   on the hosted service (`NOT RUN`); its report upload and an independent acceptance
-   audit remain pending.
+5. **P3-01 local and hosted gates pass; v1.2.0-rc.1 candidate published.** Core and
+   gRPC profiles pass locally and on GitHub Actions, including checkout-free wheel
+   CLI/MCP consumers. The current-source 1800-second soak passed its target,
+   telemetry, and independent structural oracle checks while preserving an
+   explicitly incomplete trace with recorded loss. Independent final acceptance
+   remains pending, so the stable v1.2.0 release is not yet accepted.
 
 Planning, baseline, P1, P2-01/02/03, and the local P3 profiles and soak are complete.
-Hosted workflow execution, independent review, and full v1.2 release acceptance
-remain pending. Implementation
-reports are linked from [the v1.2 plan](docs/next-version-v1.2.md).
+The `v1.2.0-rc.1` candidate is published. Independent review and full v1.2.0
+release acceptance remain pending. Implementation reports are linked from
+[the v1.2 plan](docs/next-version-v1.2.md).
 Dynamic-module lifecycle tracking,
 automatic RPC interceptors, remote collection, and a separate visualization
 UI are later workstreams.

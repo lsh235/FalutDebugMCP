@@ -20,6 +20,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from faultdebug.benchmark import BENCHMARK_SCHEMA_NAME, run_benchmark
+from faultdebug import __version__ as PACKAGE_VERSION
 from faultdebug.artifact import read_artifact, write_artifact
 from faultdebug.cli import main as cli_main
 from faultdebug.doctor import (_compiler_version, _runtime_probe,
@@ -84,7 +85,7 @@ def main() -> int:
     assert doctor["status"] in {"PASS", "FAIL", "NOT RUN"}
     assert {item["status"] for item in doctor["checks"]} <= {"PASS", "FAIL", "NOT RUN"}
     faultdebug_package = next(item for item in doctor["checks"] if item["name"] == "package:faultdebug")
-    assert faultdebug_package["version"] == "1.1.0"
+    assert faultdebug_package["version"] == PACKAGE_VERSION
     installed_version = importlib.metadata.version
     with patch("faultdebug.doctor.importlib.metadata.version",
                side_effect=lambda name: "1.0.0" if name == "faultdebug" else installed_version(name)):
@@ -92,7 +93,7 @@ def main() -> int:
     stale_package = next(item for item in stale_metadata["checks"]
                          if item["name"] == "package:faultdebug")
     assert stale_package["status"] == "PASS"
-    assert stale_package["version"] == "1.1.0" and stale_package["distribution_version"] == "1.0.0"
+    assert stale_package["version"] == PACKAGE_VERSION and stale_package["distribution_version"] == "1.0.0"
     essential = {"python", "package:libclang", "package:pyelftools", "package:mcp",
                  "tool:clang", "tool:clang++", "runtime-library"}
     healthy_checks = [{"name": name, "status": "PASS"} for name in essential]
@@ -112,7 +113,7 @@ def main() -> int:
     def broken_setup_version(name: str) -> str:
         if name == "pyelftools":
             raise importlib.metadata.PackageNotFoundError(name)
-        return "1.1.0" if name == "faultdebug" else original_version(name)
+        return PACKAGE_VERSION if name == "faultdebug" else original_version(name)
     def no_compiler(command: str) -> str | None:
         if Path(command).name in {"cc", "c++", "clang", "clang-18", "clang++", "clang++-18"}:
             return None
