@@ -56,6 +56,13 @@ check is available from the repository root:
 python3 test/build_systems/test_bazel_fixture.py
 ```
 
+The optional Make/compiledb integration check uses a temporary project and
+validates C/C++ database entries, static indexing, and the actual C++ wrapper:
+
+```bash
+.venv/bin/python test/build_systems/test_compiledb_integration.py
+```
+
 ## Local verification record
 
 | Check | Result | Evidence |
@@ -64,3 +71,4 @@ python3 test/build_systems/test_bazel_fixture.py
 | Bazel 9.2 object fixture and hook inspection | PASS | `python3 test/build_systems/test_bazel_fixture.py` |
 | Instrumentation profiles in wrapper and CMake helper | PASS | `python3 test/build_systems/test_instrumentation_profiles.py` (includes legacy and filtered generator-expression cases) |
 | Real Meson 1.12.1 configure/build/run with Clang 18 and local runtime | PASS | `/tmp/fd-meson-profile-build3`; output `42`; source object symbols confirm hooks only on `src/` files |
+| Optional compiledb 0.10.7, Clang 18, and libclang integration fixture | PASS | C/C++ command extraction, relative-path source indexing, and C++ instrumentation-hook checks |

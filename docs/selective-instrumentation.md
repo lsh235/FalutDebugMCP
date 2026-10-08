@@ -69,6 +69,35 @@ linker) explicitly. `faultdebug-cxx` remains a convenience wrapper for builds
 that can use it as both compiler and linker; `faultdebug-cc` cannot infer C++
 from an object-only link without the explicit override.
 
+### Make compilation database for source indexing
+
+For a GNU Make project, the optional external
+[`compiledb`](https://github.com/nickdiego/compiledb) tool can extract compiler
+arguments from Make's dry-run output. Install it in the developer environment,
+then run this from the configured project root:
+
+```bash
+compiledb -f -n make CC=clang CXX=clang++
+.venv/bin/fault-debug index compile_commands.json -o build/index.json
+```
+
+The `-n` option generates the database without running the build. Use the
+project's real compiler names during extraction. The current compiledb parser
+does not recognize FaultDebug's `faultdebug-cxx` wrapper as a C++ compiler, so
+create the database separately from the instrumented build. Then instrument
+the application with the wrappers as described above. The database contains
+the project's compile flags, but not the wrapper-injected instrumentation or
+link flags; it supports static source indexing and does not instrument a
+binary.
+
+Do not treat a generated compilation database as provenance for a captured
+binary. To resolve source for a trace, build the verified bundle from the
+matching immutable source snapshot, index, and instrumented binary. The
+optional integration check in
+`test/build_systems/test_compiledb_integration.py` exercises database
+extraction, indexing, and the C++ wrapper. It reports `NOT RUN` if compiledb,
+Clang, or the Python libclang bindings are unavailable.
+
 Selective instrumentation changes which runtime events can be observed. Static
 index edges and source lookup remain available, but an excluded function must
 remain unresolved when no committed runtime event identifies it.

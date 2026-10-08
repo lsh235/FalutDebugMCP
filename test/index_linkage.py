@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""Independent libclang check for C++ linkage names and C compatibility."""
-import json, tempfile
+"""Independent libclang check for C++ linkage and relative compdb paths."""
+import json, sys, tempfile
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from faultdebug.index import build_index
 
 def main() -> int:
     with tempfile.TemporaryDirectory() as directory:
-        root = Path(directory); header = root / "inline.hpp"; header.write_text("static inline int header_helper() { return 7; }\nvoid declared();\n")
+        root = Path(directory); (root / ".git").mkdir()
+        (root / "include").mkdir()
+        header = root / "include" / "inline.hpp"; header.write_text("static inline int header_helper() { return 7; }\nvoid declared();\n")
         source = root / "deliberate.cpp"; source.write_text('#include "inline.hpp"\nvoid declared() {}\nstatic void deliberate_ill() {}\nextern "C" void c_entry() { deliberate_ill(); }\n')
-        compdb = root / "compile_commands.json"; compdb.write_text(json.dumps([{"directory": str(root), "file": str(source), "arguments": ["clang++", "-std=c++17", "-c", str(source), "-o", str(root / "deliberate.o")]}]))
+        compdb = root / "compile_commands.json"; compdb.write_text(json.dumps([{"directory": str(root), "file": "deliberate.cpp", "arguments": ["clang++", "-Iinclude", "-std=c++17", "-c", "deliberate.cpp", "-o", str(root / "deliberate.o")]}]))
         result = build_index(compdb, root / "index.json")
         cpp = next(row for row in result["functions"] if row["name"] == "deliberate_ill")
         c = next(row for row in result["functions"] if row["name"] == "c_entry")
