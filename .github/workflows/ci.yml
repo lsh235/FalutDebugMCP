@@ -28,6 +28,8 @@ jobs:
           python test/index_linkage.py
       - name: Test fault-flow reports and read-only MCP
         run: python test/fault_report_test.py
+      - name: Test cross-service report and container PID identities
+        run: python test/service_report_test.py
 
   clang18-cmake-smoke:
     runs-on: ubuntu-24.04

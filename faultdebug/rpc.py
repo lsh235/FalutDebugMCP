@@ -133,14 +133,17 @@ def _normalize_event(event: Any, index: int, report: dict[str, Any]) -> dict[str
     sequence = _first(event, _SEQ_KEYS)
     timestamp = _first(event, _TIME_KEYS)
     if timestamp is None:
-        timestamp = event.get("start_monotonic_ns", event.get("end_monotonic_ns"))
+        # Native end events set start=0. Sorting them at time zero creates
+        # false sequence gaps and reversals in otherwise complete captures.
+        timestamp = event.get("start_monotonic_ns") or event.get("end_monotonic_ns")
     rpc_id = _first(event, _RPC_ID_KEYS)
     kind = _first(event, _KIND_KEYS)
     if sequence is not None:
         result["sequence"] = _as_int(sequence, "sequence", positive=True)
     if timestamp is not None:
         result["monotonic_ns"] = _as_int(timestamp, "timestamp", positive=True)
-    for key in ("start_monotonic_ns", "end_monotonic_ns", "trace_id_hi", "trace_id_lo", "direction"):
+    for key in ("start_monotonic_ns", "end_monotonic_ns", "trace_id_hi", "trace_id_lo", "direction",
+                "tid", "process_generation", "thread_generation"):
         if key in event:
             result[key] = _as_int(event[key], key, positive=True)
     if rpc_id is not None:
@@ -235,7 +238,11 @@ def rpc_trace(report: dict[str, Any], *, static_candidates: list[dict[str, Any]]
     for index, event in enumerate(raw_events):
         observed.append(_normalize_event(event, index, report))
     observed.sort(key=lambda row: (row.get("monotonic_ns", 0), row.get("sequence", row["event_index"]), row["event_index"]))
-    for before, after in zip(observed, observed[1:]):
+    # Native sequence is allocated at publication, after the caller samples
+    # its timestamp. Concurrent callers can publish in a different time order.
+    sequence_rows = (sorted(observed, key=lambda row: row.get("sequence", row["event_index"]))
+                     if isinstance(extension.get("header"), dict) else observed)
+    for before, after in zip(sequence_rows, sequence_rows[1:]):
         if "sequence" in before and "sequence" in after and after["sequence"] <= before["sequence"]:
             unresolved.append({"reason": "rpc_sequence_not_monotonic", "before": before["sequence"], "after": after["sequence"]})
         elif "sequence" in before and "sequence" in after and after["sequence"] > before["sequence"] + 1:
@@ -271,6 +278,19 @@ def process_relations(reports: list[dict[str, Any]]) -> dict[str, Any]:
     unresolved: list[dict[str, Any]] = []
     rpc_rows: list[tuple[dict[str, Any], dict[str, Any]]] = []
     for report in reports:
+        process = report.get("process") or {}
+        identity = process.get("identity") or process
+        if "process_id" in identity:
+            process_id = identity["process_id"]
+            generation = identity.get("process_generation", 1)
+            declared_session = (report.get("session") or {}).get("session_id")
+            identity_session = identity.get("session_id")
+            if (not isinstance(process_id, str) or not process_id or len(process_id) > 128
+                    or isinstance(generation, bool) or not isinstance(generation, int) or not 1 <= generation <= 0xFFFFFFFF
+                    or (identity_session is not None and (not isinstance(identity_session, str) or not identity_session))
+                    or (declared_session and identity_session and declared_session != identity_session)):
+                unresolved.append({"reason": "rpc_process_identity_invalid_or_conflicting"})
+                continue
         try:
             decoded = rpc_trace(report)
         except RPCDecodeError as exc:
@@ -278,41 +298,63 @@ def process_relations(reports: list[dict[str, Any]]) -> dict[str, Any]:
             continue
         unresolved.extend(decoded["unresolved"])
         for event in decoded["observed"]:
+            if (identity.get("process_id") is not None and event.get("process_generation") is not None
+                    and event["process_generation"] != identity.get("process_generation", 1)):
+                unresolved.append({"reason": "rpc_event_process_generation_conflict", "rpc_id": event.get("rpc_id")})
+                continue
             rpc_rows.append((report, event))
     grouped: dict[Any, list[tuple[dict[str, Any], dict[str, Any]]]] = defaultdict(list)
     for report, event in rpc_rows:
         if event.get("rpc_id") is not None:
-            grouped[event["rpc_id"]].append((report, event))
-    for rpc_id, rows in grouped.items():
-        by_pid: dict[int, list[tuple[dict[str, Any], dict[str, Any]]]] = defaultdict(list)
+            process = report.get("process") or {}
+            identity = process.get("identity") or process
+            session = identity.get("session_id", (report.get("session") or {}).get("session_id"))
+            scope = (session, event.get("trace_id_hi"), event.get("trace_id_lo"), event["rpc_id"])
+            grouped[scope].append((report, event))
+    for (session, trace_hi, trace_lo, rpc_id), rows in grouped.items():
+        # Container-local PIDs can coincide. An explicit runtime identity is
+        # authoritative; legacy captures retain their PID-only join behavior.
+        by_pid: dict[Any, list[tuple[dict[str, Any], dict[str, Any]]]] = defaultdict(list)
         for item in rows:
-            pid = item[1].get("pid") or (item[0].get("process") or {}).get("pid")
-            if pid is not None:
-                by_pid[int(pid)].append(item)
+            process = item[0].get("process") or {}
+            identity = process.get("identity") or process
+            pid = item[1].get("pid") or process.get("pid")
+            process_id = identity.get("process_id")
+            if process_id is not None:
+                endpoint = ("identity", str(process_id), identity.get("process_generation", 1))
+                by_pid[endpoint].append(item)
+            elif pid is not None:
+                by_pid[("pid", int(pid))].append(item)
         if len(by_pid) != 2:
             unresolved.append({"reason": "rpc_endpoint_pair_not_unique", "rpc_id": rpc_id,
-                               "events": len(rows), "processes": sorted(by_pid)})
+                               "events": len(rows), "processes": sorted(by_pid, key=str)})
             continue
-        endpoint_roles: dict[int, set[str]] = defaultdict(set)
+        endpoint_roles: dict[Any, set[str]] = defaultdict(set)
         explicit_pairs: set[tuple[int, int]] = set()
         for pid, items in by_pid.items():
             for report, event in items:
                 direction = event.get("direction")
                 phase = str(event.get("phase", "")).lower()
-                if direction == 2 or phase in {"begin", "send"}:
+                if direction == 2:
                     endpoint_roles[pid].add("outbound")
-                elif direction == 1 or phase in {"receive", "recv"}:
+                elif direction == 1:
+                    endpoint_roles[pid].add("inbound")
+                elif phase in {"begin", "send"}:
+                    endpoint_roles[pid].add("outbound")
+                elif phase in {"receive", "recv"}:
                     endpoint_roles[pid].add("inbound")
                 peer_pid = event.get("peer_pid")
                 if peer_pid is not None:
-                    explicit_pairs.add((pid, int(peer_pid)))
+                    own_pid = event.get("pid") or (report.get("process") or {}).get("pid")
+                    if own_pid is not None:
+                        explicit_pairs.add((int(own_pid), int(peer_pid)))
         outbound_pids = [pid for pid, roles in endpoint_roles.items() if roles == {"outbound"}]
         inbound_pids = [pid for pid, roles in endpoint_roles.items() if roles == {"inbound"}]
         if len(outbound_pids) == 1 and len(inbound_pids) == 1 and outbound_pids[0] != inbound_pids[0]:
             left_pid, right_pid = outbound_pids[0], inbound_pids[0]
-        elif not endpoint_roles and len(explicit_pairs) == 2:
+        elif not endpoint_roles and len(explicit_pairs) == 2 and all(p[0] == "pid" for p in by_pid):
             pair = sorted(by_pid)
-            if explicit_pairs != {(pair[0], pair[1]), (pair[1], pair[0])}:
+            if explicit_pairs != {(pair[0][1], pair[1][1]), (pair[1][1], pair[0][1])}:
                 unresolved.append({"reason": "rpc_endpoint_pair_not_unique", "rpc_id": rpc_id,
                                    "pairs": sorted(explicit_pairs)})
                 continue
@@ -324,9 +366,25 @@ def process_relations(reports: list[dict[str, Any]]) -> dict[str, Any]:
             continue
         left = by_pid[left_pid][0]
         right = by_pid[right_pid][0]
-        observed.append({"kind": "rpc", "rpc_id": rpc_id, "from_pid": left_pid,
-                         "to_pid": right_pid, "method_id": left[1].get("method_id", right[1].get("method_id")),
-                         "evidence": ["semantic_rpc_events"]})
+        methods = {event["method_id"] for _, event in rows if "method_id" in event}
+        if len(methods) > 1 or left_pid[0] != right_pid[0]:
+            unresolved.append({"reason": "rpc_endpoint_scope_conflict", "rpc_id": rpc_id})
+            continue
+        relation = {"kind": "rpc", "rpc_id": rpc_id,
+                    "from_pid": left[1].get("pid") or (left[0].get("process") or {}).get("pid"),
+                    "to_pid": right[1].get("pid") or (right[0].get("process") or {}).get("pid"),
+                    "method_id": left[1].get("method_id", right[1].get("method_id")),
+                    "evidence": ["semantic_rpc_events"]}
+        if left_pid[0] == "identity":
+            relation.update(from_process_id=left_pid[1], to_process_id=right_pid[1],
+                            from_process_generation=left_pid[2], to_process_generation=right_pid[2])
+        if session is not None:
+            relation["session_id"] = session
+        if trace_hi is not None:
+            relation["trace_id_hi"] = trace_hi
+        if trace_lo is not None:
+            relation["trace_id_lo"] = trace_lo
+        observed.append(relation)
     # Reuse the existing strict IPC joiner only for explicit context evidence.
     from .aggregate import build_timeline
     timeline = build_timeline(reports)

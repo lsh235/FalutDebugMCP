@@ -175,6 +175,19 @@ window. See the [fault-flow report guide](docs/fault-flow-report.md).
 
 ![Captured SIGILL and verified fault source in the execution-flow report](docs/assets/fault-flow-report.png)
 
+Try a larger, real cross-process workload with the
+[N-process shopping fault lab](docs/shopping-fault-lab.md): eight core Docker
+services plus optional risk workers, concurrent orders, controlled failures,
+and a report of observed service-to-service RPC flow and failure evidence.
+
+```sh
+docker build -f test/shop/Dockerfile -t faultdebug-shop:dev .
+.venv/bin/python test/shop/run.py --processes 16 --requests 24 --concurrency 4 \
+  --scenarios success payment_decline --output build/shop-scale
+```
+
+![Observed payment crash and HTTP failure propagation across shopping services](docs/assets/shopping-fault-report.png)
+
 The MCP server uses stdio and restricts artifact access to the configured root.
 For MCP clients that accept the common `mcpServers` configuration shape, use
 absolute paths for the installed CLI and artifact directory:

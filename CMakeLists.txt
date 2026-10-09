@@ -4,6 +4,7 @@ project(faultdebug VERSION 1.2.0 LANGUAGES C CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export compilation database" FORCE)
 option(FAULTDEBUG_ENABLE_PROVENANCE "Capture source snapshot and manifest during build" ON)
 option(FAULTDEBUG_BUILD_TESTS "Build native fixtures" ON)
+option(FAULTDEBUG_BUILD_SHOP "Build the container shopping fault fixture boundary" OFF)
 set(FAULTDEBUG_PYTHON_EXECUTABLE "" CACHE FILEPATH
   "Python interpreter used for provenance and native validation")
 if(FAULTDEBUG_ENABLE_PROVENANCE OR FAULTDEBUG_BUILD_TESTS)
@@ -63,6 +64,10 @@ endfunction()
 if(FAULTDEBUG_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
   enable_testing()
   add_subdirectory(test)
+endif()
+
+if(FAULTDEBUG_BUILD_SHOP)
+  add_subdirectory(test/shop)
 endif()
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

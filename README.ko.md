@@ -72,6 +72,19 @@ cmake --build build --parallel 2
 
 ![실제 SIGILL 장애와 검증된 소스 위치를 표시한 보고서](docs/assets/fault-flow-report.png)
 
+[N개 프로세스 쇼핑몰 장애 실험](docs/shopping-fault-lab.ko.md)으로 더 큰 규모의
+실제 서비스 간 장애를 재현할 수 있습니다. 기본 8개 독립 Docker 서비스에
+risk 워커를 추가하고, 동시 주문·재고 부족·결제 거절·응답 지연·실제 crash를
+검사합니다. 보고서에서 실패 구간, 전파 경로, 관측된 이유와 소스를 확인합니다.
+
+```sh
+docker build -f test/shop/Dockerfile -t faultdebug-shop:dev .
+.venv/bin/python test/shop/run.py --processes 16 --requests 24 --concurrency 4 \
+  --scenarios success payment_decline --output build/shop-scale
+```
+
+![쇼핑몰 서비스의 결제 crash와 실제 HTTP 실패 전파](docs/assets/shopping-fault-report.png)
+
 ## 증거 해석
 
 - **관측됨:** artifact에 실제 저장된 committed runtime record입니다.

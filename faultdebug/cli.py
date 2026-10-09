@@ -304,6 +304,18 @@ def main() -> int:
             raise SystemExit(f"fault-report: {exc}") from exc
         print(json.dumps(result, sort_keys=True)); return 0
     flow.set_defaults(func=fault_report_cmd)
+    service_flow = sub.add_parser("service-report", help="report observed service RPC flow with separate application evidence")
+    service_flow.add_argument("evidence", type=__import__('pathlib').Path)
+    service_flow.add_argument("--output", required=True, type=__import__('pathlib').Path)
+    service_flow.add_argument("--bundle", type=__import__('pathlib').Path)
+    def service_flow_cmd(n):
+        from .service_report import write_service_report
+        try:
+            result = write_service_report(n.evidence, n.output, bundle=n.bundle)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise SystemExit(f"service-report: {exc}") from exc
+        print(json.dumps(result, sort_keys=True)); return 0
+    service_flow.set_defaults(func=service_flow_cmd)
     ns = p.parse_args()
     if ns.action == "run" and ns.command[:1] == ["--"]: ns.command = ns.command[1:]
     if ns.action == "run":

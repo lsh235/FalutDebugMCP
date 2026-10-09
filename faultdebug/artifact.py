@@ -86,7 +86,10 @@ def write_artifact(report: dict, directory: Path, pid: int, *, artifact_stem: st
     raise ArtifactError("could not reserve a unique artifact path")
 
 def read_artifact(path: Path) -> dict:
-    data = path.read_bytes()
+    return decode_artifact(path.read_bytes())
+
+def decode_artifact(data: bytes) -> dict:
+    """Validate and decode the same immutable bytes used for evidence hashing."""
     if len(data) < HEADER.size: raise ArtifactError("artifact is truncated")
     magic, version, flags, length, pid, digest = HEADER.unpack_from(data)
     payload = data[HEADER.size:]

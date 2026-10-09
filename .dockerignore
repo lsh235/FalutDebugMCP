@@ -1,0 +1,11 @@
+.git
+.venv
+.tools
+build
+build-*
+dist
+output
+.playwright-cli
+**/__pycache__
+**/*.egg-info
+test-results

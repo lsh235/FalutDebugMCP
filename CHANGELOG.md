@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+- Added an N-process Docker shopping fault laboratory (8..32 application
+  processes), real HTTP orders, replay protection, compensation, concurrent
+  workloads and five controlled failure scenarios including native SIGILL.
+- Added `service-report` documents and standalone interactive service-flow
+  reports from checksummed captures and separately corroborated application
+  events; native crash reports retain Build-ID verified source evidence.
+- Scoped RPC joins by session, trace and explicit process identity/generation
+  for equal PIDs in container namespaces. Native direction takes precedence
+  over phase; end events use their actual end time rather than start=0.
+
 - Added `fault-debug fault-report` to generate Markdown, JSON, and standalone
   interactive HTML from a checksummed fault artifact. The report shows captured
   fault PCs, per-thread instrumented nesting and record order, explicit gaps,

@@ -1,9 +1,12 @@
 include README.md LICENSE NOTICE pyproject.toml CMakeLists.txt
 recursive-include faultdebug *.py
-recursive-include include *.h
+recursive-include include *.h *.hpp
 recursive-include runtime *.c
-recursive-include cmake *.cmake
+recursive-include cmake *.cmake *.cmake.in *.pc.in
 recursive-include docs *.md
+recursive-include docs/assets *.png
+recursive-include test/shop *.py *.cc *.html *.md CMakeLists.txt Dockerfile
+include .dockerignore
 recursive-include scripts *.sh *.py
 include scripts/faultdebug-cc scripts/faultdebug-cxx
 global-exclude __pycache__ *.py[cod]
