@@ -31,6 +31,13 @@ project's `.venv/bin/python` resolved the setup difference; the final complete
 CTest run passed. Initial PDF heading placement and mobile overflow findings
 were corrected and rechecked.
 
+The first hosted CI run exposed a fresh-install dependency incompatibility:
+MCP 1.9.4 imports `eval_type_backport`, removed in Pydantic 2.14. The local
+environment had Pydantic 2.13.5. Project metadata now constrains Pydantic to
+`>=2.7.2,<2.14`, preserving the pinned MCP SDK without patching third-party code
+or skipping the MCP test. See the [Pydantic change record](https://pydantic.dev/docs/validation/latest/get-started/changelog/#v2140a1-2026-05-22)
+and [MCP 1.9.4 dependencies](https://github.com/modelcontextprotocol/python-sdk/blob/v1.9.4/pyproject.toml).
+
 ## Reproduce
 
 ```sh

@@ -12,6 +12,8 @@ dependencies = [
   "libclang==18.1.1",
   "pyelftools==0.31",
   "mcp==1.9.4",
+  # MCP 1.9.4 imports eval_type_backport, removed in Pydantic 2.14.
+  "pydantic>=2.7.2,<2.14",
 ]
 
 [project.scripts]

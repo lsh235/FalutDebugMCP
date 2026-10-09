@@ -13,6 +13,8 @@
   evidence. Signal lookup is bounded and does not access dynamic TLS.
 - Added evidence-bound report, checksum, rendering-safety and MCP allowlist
   regression checks to CI. The artifact ABI and release version are unchanged.
+- Constrained Pydantic to `<2.14` for the pinned MCP 1.9.4 SDK, whose private
+  typing-helper import otherwise fails in a fresh installation.
 
 ## [1.2.0-rc.1] - 2026-10-03
 
