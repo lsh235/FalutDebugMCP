@@ -46,6 +46,9 @@ if(UNIX AND NOT APPLE)
     COMMAND fd_rpc_sidecar_probe $<TARGET_FILE:faultdebug_runtime>)
   add_test(NAME fd_rpc_scope_probe COMMAND fd_rpc_scope_probe)
   add_test(NAME fd_abi_probe COMMAND fd_abi_probe)
+  add_test(NAME fd_crash_thread_generation
+    COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/crash_thread_generation.py"
+      $<TARGET_FILE:fd_c_chain>)
   add_test(NAME fd_python_abi_decoder
     COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/abi_decoder_contract.py")
   add_test(NAME fd_python_decoder_capacity

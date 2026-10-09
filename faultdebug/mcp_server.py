@@ -68,6 +68,16 @@ def make_server(root: Path):
         rows = thread_trace(_load(root, name), tid)
         return {"items": rows[page * 200:(page + 1) * 200], "page": page, "page_size": 200, "total": len(rows)}
     @app.tool()
+    def get_fault_flow(name: str, bundle: str | None = None, max_events: int = 80) -> dict:
+        """Return a bounded runtime fault-flow model without writing reports.
+
+        Instrumented nesting, record order, static candidates and uncertainty
+        remain distinct. Bundle paths stay within the allowlisted root.
+        """
+        from .fault_report import build_fault_report
+        return build_fault_report(_load(root, name), bundle=_bundle(root, bundle) if bundle else None,
+                                  max_events=max_events)
+    @app.tool()
     def get_rpc_trace(name: str, page: int = 0) -> dict:
         """Return semantic RPC observations and unresolved evidence limits."""
         decoded = rpc_trace(_load(root, name))

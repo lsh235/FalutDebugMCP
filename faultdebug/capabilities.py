@@ -27,6 +27,7 @@ def get_capabilities() -> dict[str, Any]:
             "get_process_relations", "get_evidence_summary", "get_incident_report",
             "get_session_manifest", "get_process_participants", "list_sessions",
             "get_session", "get_provenance",
+            "get_fault_flow",
         ],
         "v09_tools": [
             "list_incidents", "get_incident_slice", "get_source_evidence",
@@ -39,6 +40,7 @@ def get_capabilities() -> dict[str, Any]:
             "max_incident_observed_events": 1000,
             "max_rpc_events": 1024,
             "max_artifact_id_length": 256,
+            "fault_flow_events_per_thread": 500,
         },
         "evidence_classes": [
             "observed", "derived", "static_candidates", "unresolved", "hypotheses",

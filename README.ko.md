@@ -56,6 +56,22 @@ cmake --build build --parallel 2
 수집한 파일을 검사하려면 `.venv/bin/fault-debug inspect artifacts/fault-<pid>.fault`를
 사용하세요. source 기반 분석에는 빌드에서 생성한 source bundle이 필요합니다.
 
+장애 문서와 탐색형 실행 흐름 보고서를 생성할 수 있습니다.
+
+```sh
+.venv/bin/fault-debug fault-report artifacts/fault-<pid>.fault \
+  --bundle build/bundle --output reports/incident-001 --language ko
+```
+
+`report.html`에서 장애 PC, 호출·복귀 기록, 누락 구간을 확인하고 함수를
+선택하면 검증된 소스 근거를 볼 수 있습니다. `report.md`는 문서,
+`report.json`은 구조화된 근거이며 HTML 문서를 인쇄해 PDF로 저장할 수도
+있습니다. 스레드 선택·검색·테마 전환을 지원합니다. 기록 순서와 정적
+후보만으로 원인을 확정하지 않습니다. 자세한 내용은
+[보고서 안내](docs/fault-flow-report.md)를 참고하세요.
+
+![실제 SIGILL 장애와 검증된 소스 위치를 표시한 보고서](docs/assets/fault-flow-report.png)
+
 ## 증거 해석
 
 - **관측됨:** artifact에 실제 저장된 committed runtime record입니다.

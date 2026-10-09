@@ -1,5 +1,19 @@
 # Changelog
 
+## [Unreleased]
+
+- Added `fault-debug fault-report` to generate Markdown, JSON, and standalone
+  interactive HTML from a checksummed fault artifact. The report shows captured
+  fault PCs, per-thread instrumented nesting and record order, explicit gaps,
+  verified source excerpts, and separate static candidates.
+- Added Korean/English report labels, search, thread selection, themes and
+  printable documents, plus read-only MCP `get_fault_flow`.
+- Fixed missing crash thread-generation metadata. Registration publishes the
+  TID after generation initialization; in-progress slots are explicit unstable
+  evidence. Signal lookup is bounded and does not access dynamic TLS.
+- Added evidence-bound report, checksum, rendering-safety and MCP allowlist
+  regression checks to CI. The artifact ABI and release version are unchanged.
+
 ## [1.2.0-rc.1] - 2026-10-03
 
 This pre-release candidate uses Python package version `1.2.0rc1` and native

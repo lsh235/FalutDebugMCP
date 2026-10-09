@@ -186,6 +186,10 @@ def collect_mapping(buf: bytes | mmap.mmap) -> dict:
         off = h.threads_offset + i * THREAD_RING_STRIDE
         thread_before = THREAD.unpack_from(buf, off)
         tid, generation, flags, count, dropped, capacity, _ = thread_before
+        if tid == (1 << 64) - 1:
+            unstable_records.append({"kind": "thread_header", "thread_slot": i,
+                                     "reason": "registration_in_progress"})
+            continue
         capacity = min(capacity or h.event_capacity, h.event_capacity)
         events = []
         for j in range(capacity):

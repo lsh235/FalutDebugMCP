@@ -288,6 +288,22 @@ def main() -> int:
         result["diagnostics"] = diagnose(report, resolutions)
         print(json.dumps(result, sort_keys=True)); return 0
     ins.set_defaults(func=inspect_cmd)
+    flow = sub.add_parser("fault-report", help="create a document and standalone interactive runtime fault-flow report")
+    flow.add_argument("artifact", type=__import__('pathlib').Path)
+    flow.add_argument("--bundle", help="verified source/binary bundle")
+    flow.add_argument("--output", required=True, type=__import__('pathlib').Path,
+                      help="new directory for report.md, report.json and report.html")
+    flow.add_argument("--max-events", type=int, default=80, help="last 1–500 pre-crash events per thread")
+    flow.add_argument("--language", choices=["en", "ko"], default="en")
+    def fault_report_cmd(n):
+        from .fault_report import write_fault_report
+        try:
+            result = write_fault_report(n.artifact, n.output, bundle=n.bundle,
+                                        max_events=n.max_events, language=n.language)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise SystemExit(f"fault-report: {exc}") from exc
+        print(json.dumps(result, sort_keys=True)); return 0
+    flow.set_defaults(func=fault_report_cmd)
     ns = p.parse_args()
     if ns.action == "run" and ns.command[:1] == ["--"]: ns.command = ns.command[1:]
     if ns.action == "run":

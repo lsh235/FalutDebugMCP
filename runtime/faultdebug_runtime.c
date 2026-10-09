@@ -122,7 +122,8 @@ static int FD_NI fd_register_thread(void) {
   uint32_t limit = fd_map->header.thread_capacity < FD_MAX_THREADS ? fd_map->header.thread_capacity : FD_MAX_THREADS;
   for (uint32_t i = 0; i < limit; ++i) {
     uint64_t empty = 0;
-    if (__atomic_compare_exchange_n(&fd_map->threads[i].header.tid, &empty, tid, 0, __ATOMIC_ACQ_REL, __ATOMIC_RELAXED)) { slot = i; break; }
+    /* Reserve without exposing a new TID with the previous generation. */
+    if (__atomic_compare_exchange_n(&fd_map->threads[i].header.tid, &empty, UINT64_MAX, 0, __ATOMIC_ACQ_REL, __ATOMIC_RELAXED)) { slot = i; break; }
   }
   if (slot == UINT32_MAX) {
     fd_publish_status(FD_STATUS_THREAD_OVERFLOW);
@@ -136,6 +137,7 @@ static int FD_NI fd_register_thread(void) {
   fd_altstacks[slot] = ss;
   if (sigaltstack(&ss, NULL) != 0) { fd_publish_status(FD_STATUS_PARTIAL); }
   if (fd_key_ready) pthread_setspecific(fd_key, &fd_tls);
+  __atomic_store_n(&ring->header.tid, tid, __ATOMIC_RELEASE);
   return 0;
 }
 static void FD_NI fd_record(uint32_t type, uintptr_t fn, uintptr_t caller) {
@@ -183,6 +185,17 @@ static void FD_NI fd_crash_handler(int sig, siginfo_t *si, void *uctx) {
         }
       }
       cr->tid = fd_tid(); cr->monotonic_ns = fd_now();
+      /* Bounded shared-memory lookup avoids first-use dynamic TLS access in
+       * the signal handler. Zero remains explicit for unregistered threads. */
+      cr->thread_generation = 0;
+      uint32_t limit = fd_map->header.thread_capacity < FD_MAX_THREADS ? fd_map->header.thread_capacity : FD_MAX_THREADS;
+      for (uint32_t i = 0; i < limit; ++i) {
+        const struct fd_thread_header *thread = &fd_map->threads[i].header;
+        if (__atomic_load_n(&thread->tid, __ATOMIC_ACQUIRE) == cr->tid) {
+          cr->thread_generation = __atomic_load_n(&thread->generation, __ATOMIC_ACQUIRE);
+          break;
+        }
+      }
 #if defined(REG_RIP)
       if (uctx) { cr->program_counter = (uint64_t)((ucontext_t *)uctx)->uc_mcontext.gregs[REG_RIP]; cr->flags |= FD_CRASH_PC_VALID; }
 #elif defined(REG_EIP)

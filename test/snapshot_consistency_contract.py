@@ -122,6 +122,13 @@ def main() -> int:
     overflow, _, _ = make_mapping()
     fmt.struct.pack_into("<I", overflow, 12, fmt.STATUS_EVENT_OVERFLOW)
     assert fmt.collect_mapping(overflow)["complete"] is False, "event loss was marked complete"
+    reserved, _, _ = make_mapping()
+    fmt.struct.pack_into("<Q", reserved, fmt.HEADER.size, (1 << 64) - 1)
+    in_progress = fmt.collect_mapping(reserved)
+    assert in_progress["threads"] == [], "reserved registration leaked a thread identity"
+    assert in_progress["complete"] is False
+    assert any(row.get("reason") == "registration_in_progress"
+               for row in in_progress["snapshot_consistency"]["unstable_records"])
     check_event_rewrite()
     check_rpc_rewrite()
     print("snapshot-consistency-contract: PASS")

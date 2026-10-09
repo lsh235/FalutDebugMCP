@@ -159,6 +159,22 @@ Bundles bind source and index data to the binary Build ID and hashes. Missing
 or mismatched inputs fail explicitly; the current worktree is not substituted
 for missing captured source.
 
+Create a shareable fault document and interactive execution-flow view:
+
+```sh
+.venv/bin/fault-debug fault-report artifacts/fault-<pid>.fault \
+  --bundle build/bundle --output reports/incident-001
+# Open reports/incident-001/report.html; document: report.md; evidence: report.json
+```
+
+The standalone HTML highlights the captured fault PC and retained function
+events, supports thread selection, search, dark/light themes, and document
+printing to PDF. Gaps, unresolved addresses, and static call candidates remain
+explicit. Use `--language ko` for Korean and `--max-events 200` for a larger
+window. See the [fault-flow report guide](docs/fault-flow-report.md).
+
+![Captured SIGILL and verified fault source in the execution-flow report](docs/assets/fault-flow-report.png)
+
 The MCP server uses stdio and restricts artifact access to the configured root.
 For MCP clients that accept the common `mcpServers` configuration shape, use
 absolute paths for the installed CLI and artifact directory:
