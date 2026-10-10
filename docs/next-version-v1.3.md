@@ -14,8 +14,7 @@ receiver는 어디까지 처리했는지, 어떤 원인 증거가 있는지** �
 
 Docker의 기존 8/16프로세스 검증을 보존하고, 네트워크 장애·재시작·N=32·로컬
 Kubernetes 검증을 추가하는 것이 v1.3의 필수 범위다. 표준 trace 연결, 재사용 가능한
-보고서, bounded MCP 조회가 이를 지원한다. 조사 근거와 도구 비교는
-[리서치 문서](next-version-research-2026-10-11.md)에 있다.
+보고서, bounded MCP 조회가 이를 지원한다.
 
 먼저 v1.2 정식 수락을 별도로 마무리한다. RC 이후 Make, fault/service report,
 Docker lab 변경이 추가되었으므로 이전 RC의 PASS를 현재 소스의 정식 수락으로

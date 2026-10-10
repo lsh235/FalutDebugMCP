@@ -62,7 +62,6 @@ build/showcase-anonymous-summary.json and screenshots under build/showcase-*.
   [print layout](https://github.com/lsh235/FalutDebugMCP/issues/4),
   [MCP transcript](https://github.com/lsh235/FalutDebugMCP/issues/5).
 - Four README languages link to the demo and explain the prebuilt execution path.
-- Announcement drafts and Trendshift submission fields are in ../launch-kit.md.
 - External announcements and Trendshift submission have not been sent.
 - Baseline stars: 0. This work does not claim that publication produced adoption
   or guarantee a star target.

@@ -10,3 +10,6 @@ dist/
 *.egg-info/
 fault-artifacts/
 .playwright-cli/
+# Local-only planning and outreach notes; retain on the author's workstation.
+/docs/launch-kit.md
+/docs/next-version-research-2026-10-11.md
