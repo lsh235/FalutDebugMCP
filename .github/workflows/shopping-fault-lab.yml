@@ -21,9 +21,9 @@ jobs:
       - name: Build instrumented shopping image
         run: docker build -f test/shop/Dockerfile -t faultdebug-shop:ci .
       - name: Exercise all failures with eight processes
-        run: python test/shop/run.py --image faultdebug-shop:ci --processes 8 --requests 4 --concurrency 2 --output build/shop-ci-n8
+        run: python test/shop/run.py --image faultdebug-shop:ci --processes 8 --requests 4 --concurrency 2 --port 8861 --output build/shop-ci-n8
       - name: Exercise sixteen processes and concurrent replay-safe orders
-        run: python test/shop/run.py --image faultdebug-shop:ci --processes 16 --requests 24 --concurrency 4 --scenarios success payment_decline --output build/shop-ci-n16
+        run: python test/shop/run.py --image faultdebug-shop:ci --processes 16 --requests 24 --concurrency 4 --scenarios success payment_decline --port 8862 --output build/shop-ci-n16
       - name: Upload synthetic evidence and reports
         if: always()
         uses: actions/upload-artifact@v4
