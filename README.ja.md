@@ -2,6 +2,22 @@
 
 [English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · **日本語**
 
+## インストール前にレポートを体験
+
+[対話型デモ](https://lsh235.github.io/FalutDebugMCP/) · [42 秒のデモ動画](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)
+
+実際の合成テストで正常な注文、決済 SIGILL、在庫タイムアウト、native C SIGSEGV を確認できます。
+Linux x86_64 のローカル Docker Engine と Compose があれば、clone 後に実行します：
+
+~~~~sh
+./scripts/try-demo.sh
+~~~~
+
+検証済みのビルド済みイメージで 8 個の独立サービスを実行し、レポートを生成します。
+ホスト側の Python・Clang・CMake は不要です。http://127.0.0.1:18870/index.html を開き、Ctrl+C でレポートサーバーを停止できます。
+スクリプトはローカル Docker socket で自身のテストコンテナを管理します。例の記録は C++ 境界イベントであり、Python スタック全体ではありません。
+開発 snapshot であり、安定版ではありません。[必要環境](docs/showcase/README.md) · [ケーススタディ](docs/case-studies/payment-crash.md)
+
 FaultDebug は C/C++ プログラムの実行時障害証拠をローカルで記録・検査する
 ツールです。軽量な C11 ランタイムが有界メモリに関数の entry/exit イベントを
 記録し、対象プロセス終了後に Python ランチャーが共有メモリ trace を回収・検証

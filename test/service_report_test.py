@@ -26,6 +26,18 @@ def joins(*reports):
 
 
 class ServiceEvidenceTests(unittest.TestCase):
+    def test_english_ui_preserves_original_evidence(self):
+        model = {"session_id": "fixture", "services": [], "calls": [],
+                 "causes": [{"reason": "요청 미확인 <script>"}], "unresolved": [],
+                 "evidence_files": []}
+        rendered = render_html(model, language="en")
+        self.assertIn('lang="en"', rendered)
+        self.assertIn("Shopping service fault report", rendered)
+        self.assertIn("요청 미확인", rendered)
+        self.assertNotIn("<script>\"", rendered)
+        with self.assertRaises(ValueError):
+            render_html(model, language="fr")
+
     def test_native_concurrent_time_order_is_not_sequence_loss(self):
         report = capture("checkout", 2)
         rows = report.pop("rpc_events")

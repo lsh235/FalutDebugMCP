@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "kind": "faultdebug-fault-flow",
+  "language": "en",
+  "capture": {
+    "complete": false,
+    "status": 7,
+    "evidence_status": "limited",
+    "snapshot_consistency": {
+      "stable": true,
+      "unstable_records": []
+    }
+  },
+  "target": {
+    "returncode": -4,
+    "signal": 4,
+    "wall_time_ms": 2073.557532
+  },
+  "threads": [
+    {
+      "id": "thread-0",
+      "slot": 0,
+      "tid": 8,
+      "generation": 1,
+      "dropped_count": 0,
+      "retained_events": 4,
+      "omitted_from_view": 0,
+      "post_crash_events": 0,
+      "events": [
+        {
+          "id": "thread-0-event-0",
+          "kind": "enter",
+          "sequence": 0,
+          "monotonic_ns": 112595522131,
+          "function": 140025828847904,
+          "callsite": 140025841052438,
+          "depth": 0,
+          "gaps_before": [],
+          "resolution": {
+            "address": 140025828847904,
+            "kind": "address",
+            "resolved": true,
+            "module": "/app/build/test/shop/libshop_boundary.so",
+            "build_id": "e1377a6e7ec5cc940291dd92090d725f4070ba71",
+            "load_bias": 140025828843520,
+            "relative_address": 4384,
+            "symbol": "shop_request_boundary",
+            "function_id": "c:@F@shop_request_boundary",
+            "static_edges": [],
+            "static_unresolved_edges": [],
+            "source": {
+              "name": "shop_request_boundary",
+              "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+              "line": 5,
+              "column": 0
+            }
+          },
+          "label": "shop_request_boundary",
+          "source_verified": true
+        },
+        {
+          "id": "thread-0-event-1",
+          "kind": "exit",
+          "sequence": 1,
+          "monotonic_ns": 112595522251,
+          "function": 140025828847904,
+          "callsite": 140025841052438,
+          "depth": 0,
+          "gaps_before": [],
+          "resolution": {
+            "address": 140025828847904,
+            "kind": "address",
+            "resolved": true,
+            "module": "/app/build/test/shop/libshop_boundary.so",
+            "build_id": "e1377a6e7ec5cc940291dd92090d725f4070ba71",
+            "load_bias": 140025828843520,
+            "relative_address": 4384,
+            "symbol": "shop_request_boundary",
+            "function_id": "c:@F@shop_request_boundary",
+            "static_edges": [],
+            "static_unresolved_edges": [],
+            "source": {
+              "name": "shop_request_boundary",
+              "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+              "line": 5,
+              "column": 0
+            }
+          },
+          "label": "shop_request_boundary",
+          "source_verified": true
+        },
+        {
+          "id": "thread-0-event-2",
+          "kind": "enter",
+          "sequence": 2,
+          "monotonic_ns": 112596347068,
+          "function": 140025828847952,
+          "callsite": 140025841052438,
+          "depth": 0,
+          "gaps_before": [],
+          "resolution": {
+            "address": 140025828847952,
+            "kind": "address",
+            "resolved": true,
+            "module": "/app/build/test/shop/libshop_boundary.so",
+            "build_id": "e1377a6e7ec5cc940291dd92090d725f4070ba71",
+            "load_bias": 140025828843520,
+            "relative_address": 4432,
+            "symbol": "shop_payment_fault",
+            "function_id": "c:@F@shop_payment_fault",
+            "static_edges": [
+              {
+                "callee_id": "c:boundary.cc@F@payment_authorization_invariant#",
+                "kind": "direct"
+              }
+            ],
+            "static_unresolved_edges": [],
+            "source": {
+              "name": "shop_payment_fault",
+              "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+              "line": 15,
+              "column": 0
+            }
+          },
+          "label": "shop_payment_fault",
+          "source_verified": true
+        },
+        {
+          "id": "thread-0-event-3",
+          "kind": "enter",
+          "sequence": 3,
+          "monotonic_ns": 112596347189,
+          "function": 140025828848000,
+          "callsite": 140025828847977,
+          "depth": 1,
+          "gaps_before": [],
+          "resolution": {
+            "address": 140025828848000,
+            "kind": "address",
+            "resolved": true,
+            "module": "/app/build/test/shop/libshop_boundary.so",
+            "build_id": "e1377a6e7ec5cc940291dd92090d725f4070ba71",
+            "load_bias": 140025828843520,
+            "relative_address": 4480,
+            "symbol": "_ZL31payment_authorization_invariantv",
+            "function_id": "c:boundary.cc@F@payment_authorization_invariant#",
+            "static_edges": [
+              {
+                "callee_id": "c:@F@__builtin_trap",
+                "kind": "direct"
+              }
+            ],
+            "static_unresolved_edges": [],
+            "source": {
+              "name": "payment_authorization_invariant()",
+              "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+              "line": 9,
+              "column": 0
+            }
+          },
+          "label": "_ZL31payment_authorization_invariantv",
+          "source_verified": true
+        }
+      ],
+      "gaps": [],
+      "unmatched_entries": [
+        {
+          "function": 140025828847952,
+          "event_id": "thread-0-event-2"
+        },
+        {
+          "function": 140025828848000,
+          "event_id": "thread-0-event-3"
+        }
+      ]
+    }
+  ],
+  "crashes": [
+    {
+      "id": "crash-0",
+      "kind": "crash",
+      "flags": 15,
+      "signal": 4,
+      "signal_name": "SIGILL",
+      "si_code": 2,
+      "pc": 140025828848020,
+      "fault_address": 140025828848020,
+      "tid": 8,
+      "generation": 1,
+      "monotonic_ns": 112596364942,
+      "thread": "thread-0",
+      "last_event": "thread-0-event-3",
+      "resolution": {
+        "address": 140025828848020,
+        "kind": "address",
+        "resolved": true,
+        "module": "/app/build/test/shop/libshop_boundary.so",
+        "build_id": "e1377a6e7ec5cc940291dd92090d725f4070ba71",
+        "load_bias": 140025828843520,
+        "relative_address": 4500,
+        "symbol": "_ZL31payment_authorization_invariantv",
+        "function_id": "c:boundary.cc@F@payment_authorization_invariant#",
+        "static_edges": [
+          {
+            "callee_id": "c:@F@__builtin_trap",
+            "kind": "direct"
+          }
+        ],
+        "static_unresolved_edges": [],
+        "source": {
+          "name": "payment_authorization_invariant()",
+          "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+          "line": 12,
+          "column": 3
+        }
+      },
+      "label": "_ZL31payment_authorization_invariantv",
+      "source_verified": true
+    }
+  ],
+  "edges": [
+    {
+      "from": "thread-0-event-2",
+      "to": "thread-0-event-3",
+      "kind": "observed_nesting"
+    },
+    {
+      "from": "thread-0-event-0",
+      "to": "thread-0-event-1",
+      "kind": "record_order"
+    },
+    {
+      "from": "thread-0-event-1",
+      "to": "thread-0-event-2",
+      "kind": "record_order"
+    },
+    {
+      "from": "thread-0-event-2",
+      "to": "thread-0-event-3",
+      "kind": "record_order"
+    },
+    {
+      "from": "thread-0-event-3",
+      "to": "crash-0",
+      "kind": "crash_context"
+    }
+  ],
+  "sources": {
+    "c:@F@shop_request_boundary": {
+      "resolved": true,
+      "function_id": "c:@F@shop_request_boundary",
+      "bundle": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle",
+      "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+      "start_line": 5,
+      "end_line": 7,
+      "source": "extern \"C\" __attribute__((noinline)) void shop_request_boundary() {\n  asm volatile(\"\" ::: \"memory\");\n}",
+      "display_end_line": 7
+    },
+    "c:@F@shop_payment_fault": {
+      "resolved": true,
+      "function_id": "c:@F@shop_payment_fault",
+      "bundle": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle",
+      "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+      "start_line": 15,
+      "end_line": 17,
+      "source": "extern \"C\" __attribute__((noinline)) void shop_payment_fault() {\n  payment_authorization_invariant();\n}",
+      "display_end_line": 17
+    },
+    "c:boundary.cc@F@payment_authorization_invariant#": {
+      "resolved": true,
+      "function_id": "c:boundary.cc@F@payment_authorization_invariant#",
+      "bundle": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle",
+      "file": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle/source/test/shop/boundary.cc",
+      "start_line": 9,
+      "end_line": 13,
+      "source": "__attribute__((noinline)) static void payment_authorization_invariant() {\n  // Controlled SIGILL: a payment authorization state transition is invalid.\n  // Keep the instruction in this source file for Build-ID verified resolution.\n  __builtin_trap();\n}",
+      "display_end_line": 13
+    }
+  },
+  "gaps": [
+    {
+      "reason": "capture_completeness_unconfirmed"
+    },
+    {
+      "reason": "rpc_capture_incomplete"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "FD-INCOMPLETE-TRACE",
+      "severity": "warning",
+      "message": "A retained thread trace has unbalanced enter/exit events; interruption or ring loss may have removed context.",
+      "evidence": {
+        "tid": 8,
+        "depth": 2
+      }
+    }
+  ],
+  "limitations": [
+    "Recorded order and instrumented nesting do not establish the root cause or a direct call through uninstrumented code.",
+    "The last recorded event before a crash is temporal context, not proof that the event caused the crash.",
+    "Unmatched entries describe retained instrumentation, not an operating-system stack unwind.",
+    "Threads are separated by TID and generation; no cross-thread causality is inferred.",
+    "Static call candidates are kept separate from runtime observations. Source text requires a verified bundle."
+  ],
+  "bundle": {
+    "path": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/bundle",
+    "verified": true
+  },
+  "artifact": {
+    "path": "/home/sra235/2026/faultDebugMCP/build-v13-p0-hosted-shop-final/shopping-fault-evidence/shop-ci-n8/payment_crash/evidence/payment/fault-7.fault",
+    "sha256": "5ab49a4361a3e3ead713e48137aecfaf8888f198e85c739a28331eff38c5d814",
+    "format": "FDAR",
+    "checksum_verified": true
+  }
+}

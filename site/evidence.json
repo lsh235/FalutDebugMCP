@@ -1,0 +1,163 @@
+{
+  "schema": 1,
+  "kind": "faultdebug-synthetic-showcase",
+  "recorded_revision": "8e47cfb6415bd845682c7b854e2a5ee9eda925df",
+  "recorded_run_url": "https://github.com/lsh235/FalutDebugMCP/actions/runs/38070068563",
+  "image_id": "sha256:ded7e6cdc8d1465ae78308a61549a37c18e2125dea74ccbe479a2e3dabd9be03",
+  "scenarios": [
+    {
+      "scenario": "success",
+      "processes": 8,
+      "observed_calls": 31,
+      "captures": 8,
+      "stable": 8,
+      "complete": 8,
+      "native_crashes": 0,
+      "session_id": "fdshop-5f822ec7a2-success"
+    },
+    {
+      "scenario": "payment_crash",
+      "processes": 8,
+      "observed_calls": 6,
+      "captures": 8,
+      "stable": 8,
+      "complete": 7,
+      "native_crashes": 1,
+      "session_id": "fdshop-79b082f93e-payment-crash"
+    },
+    {
+      "scenario": "inventory_timeout",
+      "processes": 8,
+      "observed_calls": 16,
+      "captures": 8,
+      "stable": 8,
+      "complete": 8,
+      "native_crashes": 0,
+      "session_id": "fdshop-b7b99f7b08-inventory-timeout"
+    }
+  ],
+  "native_example": {
+    "signal": 11,
+    "artifact_sha256": "683a017fe00c2cbb418568ea8bc0fdd66457b8e99e971da50a99facdf90bf087",
+    "source_verified": true,
+    "complete": false
+  },
+  "files": [
+    {
+      "path": ".nojekyll",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "assets/demo.webm",
+      "sha256": "ba1b73f5eb12dfe5e8d5ac5a8d0bca745e2b3911fee021427a068a4dee0b51fa"
+    },
+    {
+      "path": "assets/preview.png",
+      "sha256": "a486e82d801ab1d8162089507fb4e42eba18ee2e1c287055be003ae2ada3d142"
+    },
+    {
+      "path": "assets/site.js",
+      "sha256": "e90fbe3db482ee101ea285087fe2bae454b3ff453f7fdf341c816571f83115ae"
+    },
+    {
+      "path": "assets/style.css",
+      "sha256": "140c9698cf773cc9799038c29edaec8928b497b8a520c575c9cbf46d33fb08d7"
+    },
+    {
+      "path": "downloads/c-sigsegv-evidence.zip",
+      "sha256": "4b1dde3b5459ad44fc0959f76105fcd3e6c4125919be11d926bddb2d31013e7a"
+    },
+    {
+      "path": "downloads/demo-evidence.zip",
+      "sha256": "7604411fb23c5f0b9999e136eaa0e1dfd82ef4f4105e22f01291a24551147d96"
+    },
+    {
+      "path": "index.html",
+      "sha256": "520b03b1fec652d18fc15bc38c17b6efc6c53332f2eaff945735d55e2b255ea3"
+    },
+    {
+      "path": "reports/c-sigsegv/report.html",
+      "sha256": "2b2abe583b7eb6046147630ddbd50c9620f2d80039a05f9acb7e316775822a87"
+    },
+    {
+      "path": "reports/c-sigsegv/report.json",
+      "sha256": "cae3935b91c70855c90113b3cb6bf37d048684c6c3e8021836b77c12995ff714"
+    },
+    {
+      "path": "reports/c-sigsegv/report.md",
+      "sha256": "583c2db8115d59485790db0aefef1e9fe87d7e725fafe2dbbe753c675be6ce8e"
+    },
+    {
+      "path": "reports/inventory_timeout/report.html",
+      "sha256": "00a276c588ed960979e7707fa1688d1baf18fa97e54e6cb523aeb47ba919a9a4"
+    },
+    {
+      "path": "reports/inventory_timeout/report.json",
+      "sha256": "3e334f017b5b71a7753957a8bf1185779fbe86b1c3270a22e34bfd29ba97f4f8"
+    },
+    {
+      "path": "reports/inventory_timeout/report.ko.html",
+      "sha256": "47f9748ab5ef9c5836e226f7b3cc9de2bf238aa63107f117b6394e61b095e009"
+    },
+    {
+      "path": "reports/inventory_timeout/report.md",
+      "sha256": "3a707bad107bff8885f5954a00d91f319cccfe324431b6b8721e30d794737b22"
+    },
+    {
+      "path": "reports/payment_crash/fault-6/report.html",
+      "sha256": "d8de15cbe9d279a1dad639443f405cba9c403860c50b1e90cc05868df0965b9e"
+    },
+    {
+      "path": "reports/payment_crash/fault-6/report.json",
+      "sha256": "04400f62829cb1d4d6018458717fbc672f8c9863c7f0b81402850ac7e1fb003c"
+    },
+    {
+      "path": "reports/payment_crash/fault-6/report.ko.html",
+      "sha256": "a51811543938cdf1d45aba6d0eaeb84035c414cd2a3a0549f1938f9f6fd292fb"
+    },
+    {
+      "path": "reports/payment_crash/fault-6/report.md",
+      "sha256": "fb52a5e7852c5fadac23d4d2f2bb63ed02a3781a20103a38775d3dabe52010c5"
+    },
+    {
+      "path": "reports/payment_crash/report.html",
+      "sha256": "15ef43d37e002063a66ca34059330384323aff867d6c1b8b8be78e014accfba7"
+    },
+    {
+      "path": "reports/payment_crash/report.json",
+      "sha256": "24933f1c3e39abe6ad36908589b15d6fdc0e4b5da2e15ae854ca609b19e22d55"
+    },
+    {
+      "path": "reports/payment_crash/report.ko.html",
+      "sha256": "ca966cfd90872a5195e33fe31a78ddc451db9658986ef5730969ef669109116a"
+    },
+    {
+      "path": "reports/payment_crash/report.md",
+      "sha256": "982e8a2c10b4163735774c718569a9f09351058e434a0e01c993f769a1540f8a"
+    },
+    {
+      "path": "reports/success/report.html",
+      "sha256": "10393de223c19967195d7f1ac82569cada049b6b32a8dbebcc51a72058ae11a4"
+    },
+    {
+      "path": "reports/success/report.json",
+      "sha256": "7a570d360e76d08381618a4d2647adffedfaf963094efc82319308565ec20f92"
+    },
+    {
+      "path": "reports/success/report.ko.html",
+      "sha256": "fab63b0fdd6ec1cdded2d073075ce6daee3036dfdcd6e89271c0f64e168e1ffb"
+    },
+    {
+      "path": "reports/success/report.md",
+      "sha256": "45a0fb42f82537624ba623b5f9a01302780b2bdd7e78ec15258b80824dba6d6f"
+    },
+    {
+      "path": "robots.txt",
+      "sha256": "16ceb5ee3e0dc13aa9adf31a3ebbe45a1d965b8c2b9f72eaf84e5911e140ed95"
+    },
+    {
+      "path": "sitemap.xml",
+      "sha256": "1ab155701e169043df66b2209d4c28f16c4bb721496539c60fd22aef55c66dfa"
+    }
+  ]
+}

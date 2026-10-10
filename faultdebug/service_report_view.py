@@ -2,9 +2,65 @@
 import json
 
 
-def render_html(model: dict) -> str:
+def render_html(model: dict, *, language: str = "ko") -> str:
+    if language not in {"en", "ko"}:
+        raise ValueError("language must be en or ko")
     data = json.dumps(model, ensure_ascii=False).replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
-    return HTML.replace("__REPORT_DATA__", data)
+    template = HTML
+    if language == "en":
+        template = template.replace('lang="ko"', 'lang="en"')
+        for source, translated in ENGLISH.items():
+            template = template.replace(source, translated)
+    # Translate UI before inserting captured data: evidence stays verbatim.
+    return template.replace("__REPORT_DATA__", data)
+
+
+ENGLISH = {
+    "쇼핑몰 서비스 장애 보고서": "Shopping service fault report",
+    "서비스 장애 보고서": "Service fault report",
+    "실제 호출 행 또는 서비스 노드를 선택하세요.": "Select a recorded call or a service node.",
+    "시작 시각 순서입니다. 인과 관계는 전달된 parent RPC ID로 표시합니다. 같은 trace ID만으로 인과 관계를 만들지 않습니다.": "Sorted by local start time. Propagated parent RPC IDs show call ancestry; a shared trace ID alone does not establish causality.",
+    "실패 이유는 애플리케이션이 기록한 설명입니다. native RPC 및 crash와 대조하며, 주입 설정만으로 원인을 확정하지 않습니다.": "Failure reasons are application-recorded explanations, corroborated with native RPC and crash evidence. Injection settings alone do not establish the cause.",
+    "Python 호출 스택은 수집하지 않습니다. C++ 경계 모듈의 native 함수와 crash 주소만 소스·Build ID로 해석합니다.": "Python stacks are not captured. Native functions and crash addresses belong to the instrumented C++ boundary module and are resolved against source and Build IDs.",
+    "호출자가 timeout을 기록한 뒤 수신자가 응답할 수 있습니다. 호출자와 수신자 상태를 구분합니다.": "A receiver may respond after a caller times out. Caller and receiver outcomes remain separate.",
+    "SHA-256은 증거 파일을 식별합니다. 로그의 진위나 모든 사건의 완전성을 보증하지 않습니다.": "SHA-256 identifies evidence files; it does not authenticate logs or guarantee complete capture.",
+    "저장된 캡처와 로그에서 생성된 독립 HTML입니다. 외부 스크립트·이미지·CDN을 사용하지 않습니다.": "Standalone HTML generated from saved captures and logs, without external scripts, images or CDNs.",
+    "이 요청에서 관측된 원인 이벤트 없음. 실제 응답 상태와 주문 결과를 확인하세요.": "No cause event observed for this request. Inspect response status and order outcome.",
+    "화살표 = native RPC 양쪽 끝점 관측": "Arrows = observed native RPC endpoints",
+    "빨간 노드 = 원인 이벤트 · 점선 노드 = native crash": "Red node = cause event; dashed node = native crash",
+    "어디서, 왜 실패했는가": "Where and why did it fail?",
+    "증거의 범위와 미확인 항목": "Evidence scope and unresolved items",
+    "증거 파일과 SHA-256": "Evidence files and SHA-256",
+    "문서 보고서 (Markdown)": "Document report (Markdown)",
+    "전체 증거 (JSON)": "Full evidence (JSON)",
+    "선택한 RPC의 증거": "Selected RPC evidence",
+    "실제 프로세스 간 흐름": "Observed cross-process flow",
+    "쇼핑몰 서비스의 관측된 RPC 연결": "Observed shopping-service RPC connections",
+    "실제 호출 순서": "Recorded calls",
+    "개 프로세스 · ": " processes · ",
+    "개 원인 이벤트 · ": " cause events · ",
+    "전체 프로세스 ": "All processes: ",
+    "개와 고유 식별자": " and unique identities",
+    "미확인 / 누락 증거 ": "Unresolved / missing evidence: ",
+    " native crash 위치와 소스 보기": " native crash location and source",
+    " · 검증된 소스": " · verified source",
+    " · 독립 프로세스": " · independent process",
+    " 서비스 증거": " service evidence",
+    "실패 응답 / 전파": "Failure response / propagation",
+    "상태 미확인": "Unknown status",
+    "응답 성공": "Successful response",
+    "서비스 구간": "Service edge",
+    "요청 경로": "Request path",
+    "시간 ms": "Time (ms)",
+    "밝은 테마": "Light theme",
+    "어두운 테마": "Dark theme",
+    "인쇄 / PDF": "Print / PDF",
+    "요청": "Request",
+    "미확인": "Unknown",
+    "개 RPC": " RPCs",
+    "개 crash": " crashes",
+    "개": "",
+}
 
 
 HTML = r'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FaultDebug · 서비스 장애 보고서</title><link rel="icon" href="data:,"><style>

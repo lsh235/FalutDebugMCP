@@ -2,6 +2,22 @@
 
 [English](README.md) · [한국어](README.ko.md) · **简体中文** · [日本語](README.ja.md)
 
+## 无需安装，先体验报告
+
+[交互示例](https://lsh235.github.io/FalutDebugMCP/) · [42 秒演示](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)
+
+查看实际合成测试的正常订单、支付 SIGILL、库存超时，以及 native C SIGSEGV。
+在 Linux x86_64 的本地 Docker Engine 和 Compose 环境中，clone 后运行：
+
+~~~~sh
+./scripts/try-demo.sh
+~~~~
+
+脚本下载校验过的预构建镜像，运行 8 个独立服务并生成报告。
+不需要在主机安装 Python、Clang 或 CMake。打开 http://127.0.0.1:18870/index.html；Ctrl+C 停止报告服务器。
+脚本使用本地 Docker socket 管理自己的测试容器。购物示例记录的是 C++ 边界事件，不是 Python 调用栈。
+这是开发 snapshot，不是稳定版。[环境要求](docs/showcase/README.md) · [案例](docs/case-studies/payment-crash.md)
+
 FaultDebug 用于本地记录和检查 C/C++ 程序的运行时故障证据。轻量级 C11
 运行时在有界内存中记录函数进入/退出事件；目标进程退出后，Python 启动器
 收集并验证共享内存 trace，并在受支持的致命信号或部分终止情况下生成

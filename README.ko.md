@@ -2,6 +2,22 @@
 
 [English](README.md) · **한국어** · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
+## 설치 없이 보고서 체험
+
+[인터랙티브 데모](https://lsh235.github.io/FalutDebugMCP/?lang=ko) · [42초 시연](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)
+
+정상 주문·결제 SIGILL·재고 timeout의 실제 합성 테스트 기록과 native C SIGSEGV를 살펴보세요.
+Linux x86_64의 로컬 Docker Engine과 Compose가 있다면 clone 후 다음 한 명령으로
+8개 서비스의 세 시나리오를 직접 실행하고 보고서를 열 수 있습니다. 호스트 Python·Clang·CMake 설치는 필요 없습니다.
+
+~~~~sh
+./scripts/try-demo.sh
+~~~~
+
+출력 URL은 http://127.0.0.1:18870/index.html 입니다. Docker socket으로 자체 테스트 컨테이너를 관리하며 Ctrl+C로 보고서 서버를 종료합니다.
+쇼핑몰의 기록은 계측된 C++ 경계 이벤트이며 Python 스택 전체가 아닙니다. 데모는 개발 snapshot이고 정식 릴리스가 아닙니다.
+[요구 환경과 옵션](docs/showcase/README.md) · [사용 사례](docs/case-studies/payment-crash.md)
+
 FaultDebug는 C/C++ 프로그램의 실행 중 함수 이벤트를 제한된 메모리에
 기록하고, 종료 후 로컬에서 `.fault` 증거 파일을 수집·검사하는 도구입니다.
 Clang/CMake 빌드 연동, Python CLI, 읽기 전용 MCP 검사기를 제공합니다.

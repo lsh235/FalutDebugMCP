@@ -1,0 +1,29 @@
+name: Public demo pages
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', 'scripts/build-showcase.py', '.github/workflows/showcase-pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: public-demo-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify report hashes and local links
+        run: python3 scripts/build-showcase.py --verify-only --output site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
+        id: deployment

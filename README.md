@@ -1,16 +1,51 @@
 # FaultDebug
 
-> Bounded C/C++ crash tracing with verified-source inspection. Capture runtime
-> events locally, inspect what was actually recorded, and keep missing evidence
-> visible.
+> Turn C/C++ crashes into source-verified execution-flow reports.
+> Follow recorded calls across services, inspect the fault location, and see
+> which evidence is missing.
 
-[![Latest release](https://img.shields.io/github/v/release/lsh235/FalutDebugMCP?include_prereleases&label=latest%20candidate)](https://github.com/lsh235/FalutDebugMCP/releases)
+[![Native candidate](https://img.shields.io/badge/native-v1.2.0--rc.1-orange)](https://github.com/lsh235/FalutDebugMCP/releases/tag/v1.2.0-rc.1)
 [![Release gates](https://img.shields.io/github/actions/workflow/status/lsh235/FalutDebugMCP/v12-release-gate.yml?branch=main&label=release%20gates)](https://github.com/lsh235/FalutDebugMCP/actions/workflows/v12-release-gate.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/)
 [![Clang 18](https://img.shields.io/badge/Clang-18-orange)](https://clang.llvm.org/)
 [![Apache--2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
 **Guides:** [English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+
+**[Try the interactive demos](https://lsh235.github.io/FalutDebugMCP/)** ·
+**[Watch the 42-second walkthrough](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)** ·
+**[Run the fixture locally](#try-the-prebuilt-demo)** ·
+[Share feedback](https://github.com/lsh235/FalutDebugMCP/discussions)
+
+![Actual payment crash report with observed service flow](docs/assets/showcase-payment.png)
+
+Explore a [successful checkout](https://lsh235.github.io/FalutDebugMCP/reports/success/report.html),
+[payment SIGILL](https://lsh235.github.io/FalutDebugMCP/reports/payment_crash/report.html),
+[inventory timeout](https://lsh235.github.io/FalutDebugMCP/reports/inventory_timeout/report.html),
+or [native C SIGSEGV](https://lsh235.github.io/FalutDebugMCP/reports/c-sigsegv/report.html).
+The online examples are recorded synthetic executions; the local fixture
+reproduces real Docker service interactions and native captures.
+
+## Try the prebuilt demo
+
+Requires **Linux x86_64, a local Docker Engine and Docker Compose**. After cloning,
+one script downloads the checksummed development demo image, runs eight services
+through three outcomes and serves the reports. No host Python, Clang or CMake
+installation is needed.
+
+~~~~sh
+git clone https://github.com/lsh235/FalutDebugMCP.git
+cd FalutDebugMCP
+./scripts/try-demo.sh
+~~~~
+
+Open **http://127.0.0.1:18870/index.html** when the script prints the report URL.
+Ctrl+C stops the report server. The analyzer uses the local Docker socket to
+manage its own fixture containers. See [requirements and overrides](docs/showcase/README.md).
+The shopping app is Python with an instrumented C++ boundary; these are native
+boundary events, not Python stacks. Incomplete captures remain marked incomplete.
+
+## Native tracing and inspection
 
 FaultDebug combines a small C11 runtime, C/C++ build integration, and a Python
 CLI/MCP inspector. The runtime records bounded function-entry and function-exit
@@ -26,13 +61,16 @@ static call-graph candidates as observed execution.
 
 ## Project status
 
-The current version is **1.2.0rc1** (Git tag `v1.2.0-rc.1`), published as a
-pre-release candidate. Local and GitHub-hosted core and gRPC profiles pass. An
-independent acceptance review has not run yet, and the 30-minute soak trace is
-incomplete with 344,793 dropped events and 9,276 unstable snapshot records.
-This candidate is not the final v1.2.0 release; see
-the [v1.2 plan](docs/next-version-v1.2.md) and
-[validation report](docs/v1.2-p3-01.md) for scope and limits.
+The native package is **1.2.0rc1**; `v1.2.0-rc.1` is a pre-release candidate.
+Main also includes offline service reports and generation-counter fixes.
+Current-source core/gRPC and Docker N=8/16 gates pass locally and on GitHub;
+see [the current-source validation](docs/v1.3-p0-01.md).
+The prebuilt demo is a separate development snapshot, not a stable release.
+
+Final independent acceptance and a fresh 30-minute soak after the generation
+fix remain pending. The earlier RC soak was incomplete; its counts and source
+scope are in [the historical validation](docs/v1.2-p3-01.md).
+See the [v1.3 plan](docs/next-version-v1.3.md) for remaining work.
 
 ## What it provides
 
@@ -62,6 +100,10 @@ it.
 - Use a local CLI or read-only MCP server to inspect artifacts and explicitly
   separate observed events, static candidates, and unresolved evidence.
 - Keep overflow, incomplete snapshots, and missing optional evidence visible.
+
+Practical examples: [payment process crash](docs/case-studies/payment-crash.md),
+[inventory timeout](docs/case-studies/inventory-timeout.md), and
+[native C SIGSEGV](docs/case-studies/c-sigsegv.md).
 
 The runtime currently targets Linux on Ubuntu 24.04 x86_64. It is a diagnostic
 and forensic aid, not a lossless recorder: inspect artifact completeness and

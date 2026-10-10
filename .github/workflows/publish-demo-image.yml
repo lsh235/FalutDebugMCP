@@ -1,0 +1,44 @@
+name: Publish prebuilt demo image
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      DEMO_TAG: demo-2026-10-11
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build demo image
+        run: |
+          docker build -f test/shop/Dockerfile \
+            --label org.opencontainers.image.source=https://github.com/lsh235/FalutDebugMCP \
+            --label org.opencontainers.image.revision="$GITHUB_SHA" \
+            --label org.opencontainers.image.licenses=Apache-2.0 \
+            -t "faultdebug-shop:$DEMO_TAG" .
+      - name: Exercise the actual newcomer command
+        env:
+          FAULTDEBUG_DEMO_PORT: '18861'
+        run: |
+          FAULTDEBUG_DEMO_IMAGE="faultdebug-shop:$DEMO_TAG" scripts/try-demo.sh --no-serve
+      - name: Export image and checksum
+        run: |
+          mkdir -p build/demo-release
+          docker save "faultdebug-shop:$DEMO_TAG" | gzip -1 > build/demo-release/faultdebug-demo-amd64.tar.gz
+          cd build/demo-release
+          sha256sum faultdebug-demo-amd64.tar.gz > SHA256SUMS
+      - name: Publish the development demo download
+        run: |
+          gh release create "$DEMO_TAG" --target "$GITHUB_SHA" --prerelease --latest=false \
+            --title "FaultDebug demo snapshot · 2026-10-11" \
+            --notes-file docs/showcase/demo-release.md \
+            build/demo-release/faultdebug-demo-amd64.tar.gz build/demo-release/SHA256SUMS
+      - name: Keep fixture evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prebuilt-demo-fixture-evidence
+          path: build/demo-*/

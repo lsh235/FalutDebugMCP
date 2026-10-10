@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "kind": "faultdebug-fault-flow",
+  "language": "en",
+  "capture": {
+    "complete": false,
+    "status": 7,
+    "evidence_status": "limited",
+    "snapshot_consistency": {
+      "stable": true,
+      "unstable_records": []
+    }
+  },
+  "target": {
+    "returncode": -11,
+    "signal": 11,
+    "wall_time_ms": 32.084577
+  },
+  "threads": [
+    {
+      "id": "thread-0",
+      "slot": 0,
+      "tid": 674932,
+      "generation": 1,
+      "dropped_count": 0,
+      "retained_events": 2,
+      "omitted_from_view": 0,
+      "post_crash_events": 0,
+      "events": [
+        {
+          "id": "thread-0-event-0",
+          "kind": "enter",
+          "sequence": 0,
+          "monotonic_ns": 55100876373601,
+          "function": 97402129441232,
+          "callsite": 123423489696202,
+          "depth": 0,
+          "gaps_before": [],
+          "resolution": {
+            "address": 97402129441232,
+            "kind": "address",
+            "resolved": false,
+            "module": "",
+            "build_id": "b71189cb99da174d7d98947a730b87e6865a97ea",
+            "symbol": "main",
+            "reason": "ambiguous_function_index",
+            "candidates": [
+              "c:@F@main",
+              "c:@F@main#I#**C#",
+              "c:@F@main#"
+            ]
+          },
+          "label": "main",
+          "source_verified": false
+        },
+        {
+          "id": "thread-0-event-1",
+          "kind": "enter",
+          "sequence": 1,
+          "monotonic_ns": 55100876374507,
+          "function": 97402129441472,
+          "callsite": 97402129441380,
+          "depth": 1,
+          "gaps_before": [],
+          "resolution": {
+            "address": 97402129441472,
+            "kind": "address",
+            "resolved": true,
+            "module": "",
+            "build_id": "b71189cb99da174d7d98947a730b87e6865a97ea",
+            "load_bias": 97402129436672,
+            "relative_address": 4800,
+            "symbol": "fd_segv",
+            "function_id": "c:main.c@F@fd_segv",
+            "static_edges": [
+              {
+                "callee_id": "c:@F@_exit",
+                "kind": "direct"
+              },
+              {
+                "callee_id": "c:@F@_exit",
+                "kind": "direct"
+              }
+            ],
+            "static_unresolved_edges": [],
+            "source": {
+              "name": "fd_segv",
+              "file": "/home/sra235/2026/faultDebugMCP/build/showcase-c-bundle/source/test/programs/signals/main.c",
+              "line": 8,
+              "column": 0
+            }
+          },
+          "label": "fd_segv",
+          "source_verified": true
+        }
+      ],
+      "gaps": [],
+      "unmatched_entries": [
+        {
+          "function": 97402129441232,
+          "event_id": "thread-0-event-0"
+        },
+        {
+          "function": 97402129441472,
+          "event_id": "thread-0-event-1"
+        }
+      ]
+    }
+  ],
+  "crashes": [
+    {
+      "id": "crash-0",
+      "kind": "crash",
+      "flags": 15,
+      "signal": 11,
+      "signal_name": "SIGSEGV",
+      "si_code": 2,
+      "pc": 97402129441604,
+      "fault_address": 123423499763712,
+      "tid": 674932,
+      "generation": 1,
+      "monotonic_ns": 55100876384022,
+      "thread": "thread-0",
+      "last_event": "thread-0-event-1",
+      "resolution": {
+        "address": 97402129441604,
+        "kind": "address",
+        "resolved": true,
+        "module": "",
+        "build_id": "b71189cb99da174d7d98947a730b87e6865a97ea",
+        "load_bias": 97402129436672,
+        "relative_address": 4932,
+        "symbol": "fd_segv",
+        "function_id": "c:main.c@F@fd_segv",
+        "static_edges": [
+          {
+            "callee_id": "c:@F@_exit",
+            "kind": "direct"
+          },
+          {
+            "callee_id": "c:@F@_exit",
+            "kind": "direct"
+          }
+        ],
+        "static_unresolved_edges": [],
+        "source": {
+          "name": "fd_segv",
+          "file": "/home/sra235/2026/faultDebugMCP/build/showcase-c-bundle/source/test/programs/signals/main.c",
+          "line": 8,
+          "column": 235
+        }
+      },
+      "label": "fd_segv",
+      "source_verified": true
+    }
+  ],
+  "edges": [
+    {
+      "from": "thread-0-event-0",
+      "to": "thread-0-event-1",
+      "kind": "observed_nesting"
+    },
+    {
+      "from": "thread-0-event-0",
+      "to": "thread-0-event-1",
+      "kind": "record_order"
+    },
+    {
+      "from": "thread-0-event-1",
+      "to": "crash-0",
+      "kind": "crash_context"
+    }
+  ],
+  "sources": {
+    "c:main.c@F@fd_segv": {
+      "resolved": true,
+      "function_id": "c:main.c@F@fd_segv",
+      "bundle": "build/showcase-c-bundle",
+      "file": "/home/sra235/2026/faultDebugMCP/build/showcase-c-bundle/source/test/programs/signals/main.c",
+      "start_line": 8,
+      "end_line": 8,
+      "source": "__attribute__((noinline)) static void fd_segv(void){size_t p=(size_t)sysconf(_SC_PAGESIZE);if(!p)_exit(90);void *x=mmap(0,p,PROT_NONE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0);if(x==MAP_FAILED)_exit(90);volatile char *q=(volatile char*)x;(void)*q;}",
+      "display_end_line": 8
+    }
+  },
+  "gaps": [
+    {
+      "reason": "capture_completeness_unconfirmed"
+    },
+    {
+      "reason": "rpc_capture_incomplete"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "FD-MISSING-SYMBOL",
+      "severity": "error",
+      "message": "No unique symbol could be verified for this address.",
+      "evidence": {
+        "address": 97402129441232,
+        "kind": "address",
+        "resolved": false,
+        "module": "",
+        "build_id": "b71189cb99da174d7d98947a730b87e6865a97ea",
+        "symbol": "main",
+        "reason": "ambiguous_function_index",
+        "candidates": [
+          "c:@F@main",
+          "c:@F@main#I#**C#",
+          "c:@F@main#"
+        ]
+      }
+    },
+    {
+      "code": "FD-INCOMPLETE-TRACE",
+      "severity": "warning",
+      "message": "A retained thread trace has unbalanced enter/exit events; interruption or ring loss may have removed context.",
+      "evidence": {
+        "tid": 674932,
+        "depth": 2
+      }
+    }
+  ],
+  "limitations": [
+    "Recorded order and instrumented nesting do not establish the root cause or a direct call through uninstrumented code.",
+    "The last recorded event before a crash is temporal context, not proof that the event caused the crash.",
+    "Unmatched entries describe retained instrumentation, not an operating-system stack unwind.",
+    "Threads are separated by TID and generation; no cross-thread causality is inferred.",
+    "Static call candidates are kept separate from runtime observations. Source text requires a verified bundle."
+  ],
+  "bundle": {
+    "path": "build/showcase-c-bundle",
+    "verified": true
+  },
+  "artifact": {
+    "path": "/home/sra235/2026/faultDebugMCP/build/showcase-c-capture/fault-674932.fault",
+    "sha256": "683a017fe00c2cbb418568ea8bc0fdd66457b8e99e971da50a99facdf90bf087",
+    "format": "FDAR",
+    "checksum_verified": true
+  }
+}
