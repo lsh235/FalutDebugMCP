@@ -64,5 +64,5 @@ and validate reports without starting the server. Existing outputs are rejected.
 
 Small tasks are tracked in GitHub Issues with good first issue/help wanted labels.
 Share installation failures with OS, Docker versions, the failing step and
-sanitized logs. The launch kit contains ready-to-review announcement drafts;
-external social posts are not automatically sent.
+sanitized logs. External social posts and Trendshift submissions have not been
+sent.
