@@ -17,6 +17,10 @@ def main() -> int:
     server = make_server(ns.root); tools = server._tool_manager._tools
     expected = {"get_capabilities", "check_store", "open_fault", "get_thread_trace", "get_rpc_trace", "get_process_relations", "get_evidence_summary", "get_incident_report", "get_session_manifest", "get_process_participants", "list_sessions", "get_session", "get_provenance", "list_incidents", "get_incident_slice", "get_source_evidence", "get_unresolved", "discover_artifacts", "resolve_addresses", "get_function_source", "get_call_relations"}
     assert expected <= set(tools), sorted(tools)
+    descriptions = {name: (tools[name].description or "").strip() for name in expected}
+    assert all(len(description) >= 30 for description in descriptions.values()), {
+        name: description for name, description in descriptions.items() if len(description) < 30
+    }
     opened = tools["open_fault"].fn(ns.artifact, ns.bundle)
     assert opened["bundle"]["verified"] is True
     trace = tools["get_thread_trace"].fn(ns.artifact, None, 0)

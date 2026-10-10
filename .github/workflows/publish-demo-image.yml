@@ -21,7 +21,7 @@ jobs:
       - name: Build demo image
         run: |
           docker build -f test/shop/Dockerfile \
-            --label org.opencontainers.image.source=https://github.com/lsh235/FalutDebugMCP \
+            --label org.opencontainers.image.source=https://github.com/lsh235/FaultDebugMCP \
             --label org.opencontainers.image.revision="$GITHUB_SHA" \
             --label org.opencontainers.image.licenses=Apache-2.0 \
             -t "faultdebug-shop:$DEMO_TAG" .

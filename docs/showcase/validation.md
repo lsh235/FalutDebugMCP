@@ -35,16 +35,16 @@ publisher guard/artifact-path changes are separate from these executed results.
 
 | Gate | Result | Evidence |
 | --- | --- | --- |
-| General GitHub CI | PASS | [38075216287](https://github.com/lsh235/FalutDebugMCP/actions/runs/38075216287) |
-| Pages deployment | PASS | [38075216591](https://github.com/lsh235/FalutDebugMCP/actions/runs/38075216591) |
-| Hosted prebuilt image/newcomer script | PASS, three scenarios | [38075238008](https://github.com/lsh235/FalutDebugMCP/actions/runs/38075238008) |
+| General GitHub CI | PASS | [38075216287](https://github.com/lsh235/FaultDebugMCP/actions/runs/38075216287) |
+| Pages deployment | PASS | [38075216591](https://github.com/lsh235/FaultDebugMCP/actions/runs/38075216591) |
+| Hosted prebuilt image/newcomer script | PASS, three scenarios | [38075238008](https://github.com/lsh235/FaultDebugMCP/actions/runs/38075238008) |
 | Public files | PASS | Nine live HTML/video/evidence-download files matched committed SHA-256 |
 | Public browser path | PASS | Landing → service report → native crash; Build ID verified and limited evidence visible |
 | Anonymous image download | PASS | Actual script download, SHA256SUMS validation, Docker load and local fixture execution |
 | Loaded public image | PASS | Source revision label matches 4ab393f; 24 stable captures, 23 complete; intentional crash stays incomplete |
 | Local report server after download | PASS | http://127.0.0.1:18873/index.html |
 
-[Published demo snapshot](https://github.com/lsh235/FalutDebugMCP/releases/tag/demo-2026-10-11)
+[Published demo snapshot](https://github.com/lsh235/FaultDebugMCP/releases/tag/demo-2026-10-11)
 is a prerelease, explicitly separate from native stable acceptance.
 Its Docker image archive is 292,547,825 bytes. Loaded image ID:
 sha256:e377381c3e2cf0480e4f7e5194696f3689c63cf774105706cbdcb87afab484bc.
@@ -60,11 +60,11 @@ build/showcase-anonymous-summary.json and screenshots under build/showcase-*.
 
 - Repository Homepage and description point to the public demo.
 - Five actionable newcomer/help-wanted issues exist:
-  [translations](https://github.com/lsh235/FalutDebugMCP/issues/1),
-  [Make walkthrough](https://github.com/lsh235/FalutDebugMCP/issues/2),
-  [Docker diagnostics](https://github.com/lsh235/FalutDebugMCP/issues/3),
-  [print layout](https://github.com/lsh235/FalutDebugMCP/issues/4),
-  [MCP transcript](https://github.com/lsh235/FalutDebugMCP/issues/5).
+  [translations](https://github.com/lsh235/FaultDebugMCP/issues/1),
+  [Make walkthrough](https://github.com/lsh235/FaultDebugMCP/issues/2),
+  [Docker diagnostics](https://github.com/lsh235/FaultDebugMCP/issues/3),
+  [print layout](https://github.com/lsh235/FaultDebugMCP/issues/4),
+  [MCP transcript](https://github.com/lsh235/FaultDebugMCP/issues/5).
 - Four README languages link to the demo and explain the prebuilt execution path.
 - External announcements and Trendshift submission have not been sent.
 - Baseline stars: 0. This work does not claim that publication produced adoption

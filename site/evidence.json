@@ -2,7 +2,7 @@
   "schema": 1,
   "kind": "faultdebug-synthetic-showcase",
   "recorded_revision": "8e47cfb6415bd845682c7b854e2a5ee9eda925df",
-  "recorded_run_url": "https://github.com/lsh235/FalutDebugMCP/actions/runs/38070068563",
+  "recorded_run_url": "https://github.com/lsh235/FaultDebugMCP/actions/runs/38070068563",
   "image_id": "sha256:ded7e6cdc8d1465ae78308a61549a37c18e2125dea74ccbe479a2e3dabd9be03",
   "scenarios": [
     {
@@ -73,7 +73,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "520b03b1fec652d18fc15bc38c17b6efc6c53332f2eaff945735d55e2b255ea3"
+      "sha256": "0a139c2ec1a09e8dd427b4750ed20eb7d49d83b2cecb3b7c00027500ac0b251d"
     },
     {
       "path": "reports/c-sigsegv/report.html",
@@ -157,7 +157,7 @@
     },
     {
       "path": "sitemap.xml",
-      "sha256": "1ab155701e169043df66b2209d4c28f16c4bb721496539c60fd22aef55c66dfa"
+      "sha256": "0c86adf54e7e2c4fb26f0a9a2b2f5eabbe75420a3f4930a03c5d4ee213e3c097"
     }
   ]
 }

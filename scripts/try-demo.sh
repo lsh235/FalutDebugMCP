@@ -26,7 +26,7 @@ if ! docker image inspect "$image" >/dev/null 2>&1; then
   command -v curl >/dev/null || { echo "curl is required to download the image." >&2; exit 2; }
   cache="$(mktemp -d)"
   trap 'rm -rf "$cache"' EXIT
-  url="https://github.com/lsh235/FalutDebugMCP/releases/download/$tag"
+  url="https://github.com/lsh235/FaultDebugMCP/releases/download/$tag"
   curl --fail --location --retry 3 "$url/faultdebug-demo-amd64.tar.gz" -o "$cache/faultdebug-demo-amd64.tar.gz"
   curl --fail --location --retry 3 "$url/SHA256SUMS" -o "$cache/SHA256SUMS"
   (cd "$cache" && sha256sum --check SHA256SUMS)

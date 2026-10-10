@@ -28,8 +28,19 @@ jobs:
           python test/index_linkage.py
       - name: Test fault-flow reports and read-only MCP
         run: python test/fault_report_test.py
+      - name: Check MCP tool descriptions
+        run: python test/mcp_tool_metadata.py
       - name: Test cross-service report and container PID identities
         run: python test/service_report_test.py
+
+  mcp-container:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build read-only MCP image
+        run: docker build -f Dockerfile.mcp -t faultdebug-mcp:ci .
+      - name: Check packaged MCP command
+        run: docker run --rm faultdebug-mcp:ci --help
 
   clang18-cmake-smoke:
     runs-on: ubuntu-24.04

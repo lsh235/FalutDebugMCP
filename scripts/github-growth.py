@@ -16,7 +16,7 @@ def get(endpoint):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default="lsh235/FalutDebugMCP")
+    parser.add_argument("--repo", default="lsh235/FaultDebugMCP")
     parser.add_argument("--output", type=Path, default=Path("output/growth"))
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)

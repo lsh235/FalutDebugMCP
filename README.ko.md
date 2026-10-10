@@ -4,7 +4,7 @@
 
 ## 설치 없이 보고서 체험
 
-[인터랙티브 데모](https://lsh235.github.io/FalutDebugMCP/?lang=ko) · [42초 시연](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)
+[인터랙티브 데모](https://lsh235.github.io/FaultDebugMCP/?lang=ko) · [42초 시연](https://lsh235.github.io/FaultDebugMCP/assets/demo.webm)
 
 정상 주문·결제 SIGILL·재고 timeout의 실제 합성 테스트 기록과 native C SIGSEGV를 살펴보세요.
 Linux x86_64의 로컬 Docker Engine과 Compose가 있다면 clone 후 다음 한 명령으로
@@ -29,7 +29,7 @@ Clang/CMake 빌드 연동, Python CLI, 읽기 전용 MCP 검사기를 제공합�
 
 ## 현재 상태
 
-최신 후보 버전은 [`v1.2.0-rc.1`](https://github.com/lsh235/FalutDebugMCP/releases/tag/v1.2.0-rc.1)입니다.
+최신 후보 버전은 [`v1.2.0-rc.1`](https://github.com/lsh235/FaultDebugMCP/releases/tag/v1.2.0-rc.1)입니다.
 core와 gRPC 로컬·GitHub Actions 게이트는 통과했지만, 독립 최종 검토는 아직
 실행 전입니다. 30분 soak trace는 344,793개 이벤트 손실과 9,276개의 불안정한
 snapshot을 기록해 불완전합니다. 정식 `v1.2.0` 릴리스로 간주하지 마세요.
@@ -40,8 +40,8 @@ snapshot을 기록해 불완전합니다. 정식 `v1.2.0` 릴리스로 간주하
 Ninja입니다.
 
 ```sh
-git clone https://github.com/lsh235/FalutDebugMCP.git
-cd FalutDebugMCP
+git clone https://github.com/lsh235/FaultDebugMCP.git
+cd FaultDebugMCP
 sudo apt-get update
 sudo apt-get install clang-18 llvm-18-tools cmake ninja-build python3.12 python3.12-venv
 python3.12 -m venv .venv
@@ -53,6 +53,14 @@ cmake -S . -B build -G Ninja \
   -DFAULTDEBUG_PYTHON_EXECUTABLE="$PWD/.venv/bin/python" \
   -DFAULTDEBUG_BUILD_TESTS=ON
 cmake --build build --parallel 2
+```
+
+`uv`를 사용한다면 위 Python 가상환경·설치 명령을 다음 두 명령으로 바꿀 수
+있습니다. Clang, CMake 등 apt로 설치한 native 도구는 여전히 필요합니다.
+
+```sh
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -e .
 ```
 
 환경을 확인하고 예제를 실행합니다.
@@ -100,6 +108,9 @@ docker build -f test/shop/Dockerfile -t faultdebug-shop:dev .
 ```
 
 ![쇼핑몰 서비스의 결제 crash와 실제 HTTP 실패 전파](docs/assets/shopping-fault-report.png)
+
+artifact만 읽는 Docker MCP 구성은 [컨테이너 안내](docs/mcp-container.md)를
+참고하세요. 추적 빌드는 별도 native 환경에서 실행합니다.
 
 ## 증거 해석
 

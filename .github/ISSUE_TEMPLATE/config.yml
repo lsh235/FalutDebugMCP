@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Questions and design discussion
-    url: https://github.com/lsh235/FalutDebugMCP/discussions
+    url: https://github.com/lsh235/FaultDebugMCP/discussions
     about: Ask usage questions or discuss broader design proposals.
   - name: Security vulnerability
-    url: https://github.com/lsh235/FalutDebugMCP/security/advisories/new
+    url: https://github.com/lsh235/FaultDebugMCP/security/advisories/new
     about: Report vulnerabilities privately; do not include exploit details in a public issue.

@@ -15,11 +15,11 @@ make one focused correction when the cause is clear. Escalate to a sub-agent whe
 - Conflicting evidence prevents a safe decision about capture integrity, source
   matching, or the meaning of a reported fault.
 
-Use `gpt-6-astra` as the preferred higher-capability model when the tool exposes
-it. Use `high` reasoning, or `xhigh` for an unresolved multi-component diagnosis.
-Pass a concise, self-contained task with `fork_turns="none"` when setting a model
-override. If the coordinator already uses that model or a more capable one, a
-second opinion may help, but do not describe it as a model upgrade.
+Use `gpt-6.1-sol` as the preferred higher-capability sub-agent model when the
+tool exposes it. Use high reasoning, or xhigh for an unresolved multi-component
+diagnosis. Pass a concise, self-contained task with `fork_turns="none"` when
+setting a model override. If the coordinator already uses that model or a more
+capable one, a second opinion may help, but do not describe it as a model upgrade.
 
 The handoff must include:
 

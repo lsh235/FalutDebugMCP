@@ -4,25 +4,25 @@
 > Follow recorded calls across services, inspect the fault location, and see
 > which evidence is missing.
 
-[![Native candidate](https://img.shields.io/badge/native-v1.2.0--rc.1-orange)](https://github.com/lsh235/FalutDebugMCP/releases/tag/v1.2.0-rc.1)
-[![Release gates](https://img.shields.io/github/actions/workflow/status/lsh235/FalutDebugMCP/v12-release-gate.yml?branch=main&label=release%20gates)](https://github.com/lsh235/FalutDebugMCP/actions/workflows/v12-release-gate.yml)
+[![Native candidate](https://img.shields.io/badge/native-v1.2.0--rc.1-orange)](https://github.com/lsh235/FaultDebugMCP/releases/tag/v1.2.0-rc.1)
+[![Release gates](https://img.shields.io/github/actions/workflow/status/lsh235/FaultDebugMCP/v12-release-gate.yml?branch=main&label=release%20gates)](https://github.com/lsh235/FaultDebugMCP/actions/workflows/v12-release-gate.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/)
 [![Clang 18](https://img.shields.io/badge/Clang-18-orange)](https://clang.llvm.org/)
 [![Apache--2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
 **Guides:** [English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-**[Try the interactive demos](https://lsh235.github.io/FalutDebugMCP/)** ·
-**[Watch the 42-second walkthrough](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)** ·
+**[Try the interactive demos](https://lsh235.github.io/FaultDebugMCP/)** ·
+**[Watch the 42-second walkthrough](https://lsh235.github.io/FaultDebugMCP/assets/demo.webm)** ·
 **[Run the fixture locally](#try-the-prebuilt-demo)** ·
-[Share feedback](https://github.com/lsh235/FalutDebugMCP/discussions)
+[Share feedback](https://github.com/lsh235/FaultDebugMCP/discussions)
 
 ![Actual payment crash report with observed service flow](docs/assets/showcase-payment.png)
 
-Explore a [successful checkout](https://lsh235.github.io/FalutDebugMCP/reports/success/report.html),
-[payment SIGILL](https://lsh235.github.io/FalutDebugMCP/reports/payment_crash/report.html),
-[inventory timeout](https://lsh235.github.io/FalutDebugMCP/reports/inventory_timeout/report.html),
-or [native C SIGSEGV](https://lsh235.github.io/FalutDebugMCP/reports/c-sigsegv/report.html).
+Explore a [successful checkout](https://lsh235.github.io/FaultDebugMCP/reports/success/report.html),
+[payment SIGILL](https://lsh235.github.io/FaultDebugMCP/reports/payment_crash/report.html),
+[inventory timeout](https://lsh235.github.io/FaultDebugMCP/reports/inventory_timeout/report.html),
+or [native C SIGSEGV](https://lsh235.github.io/FaultDebugMCP/reports/c-sigsegv/report.html).
 The online examples are recorded synthetic executions; the local fixture
 reproduces real Docker service interactions and native captures.
 
@@ -34,8 +34,8 @@ through three outcomes and serves the reports. No host Python, Clang or CMake
 installation is needed.
 
 ~~~~sh
-git clone https://github.com/lsh235/FalutDebugMCP.git
-cd FalutDebugMCP
+git clone https://github.com/lsh235/FaultDebugMCP.git
+cd FaultDebugMCP
 ./scripts/try-demo.sh
 ~~~~
 
@@ -126,8 +126,8 @@ provided.
 Clone the repository:
 
 ```sh
-git clone https://github.com/lsh235/FalutDebugMCP.git
-cd FalutDebugMCP
+git clone https://github.com/lsh235/FaultDebugMCP.git
+cd FaultDebugMCP
 ```
 
 Install the native toolchain and Python environment:
@@ -139,6 +139,15 @@ sudo apt-get install clang-18 llvm-18-tools cmake ninja-build python3.12 python3
 python3.12 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -e .
+```
+
+If you prefer [`uv`](https://docs.astral.sh/uv/), replace the three Python
+environment/install commands above with the following. The apt-installed
+native toolchain is still required for tracing builds:
+
+```sh
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -e .
 ```
 
 Configure and build the runtime plus the native fixtures:
@@ -247,7 +256,8 @@ absolute paths for the installed CLI and artifact directory:
 
 The server is read-only. It does not upload artifacts or contact a remote
 service. Do not expose sensitive fault artifacts, bundles, or source paths in
-public issues.
+public issues. To run the MCP inspector in a container with a read-only artifact
+mount, see the [Docker MCP guide](docs/mcp-container.md).
 
 ## Evidence rules
 

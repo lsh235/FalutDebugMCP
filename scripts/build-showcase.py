@@ -142,7 +142,7 @@ def build(args) -> dict:
     (output / "robots.txt").write_text("User-agent: *\nAllow: /\n")
     (output / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-        '<url><loc>https://lsh235.github.io/FalutDebugMCP/</loc></url></urlset>\n')
+        '<url><loc>https://lsh235.github.io/FaultDebugMCP/</loc></url></urlset>\n')
     manifest["files"] = [{"path": p.relative_to(output).as_posix(), "sha256": digest(p)}
                          for p in sorted(output.rglob("*")) if p.is_file()]
     (output / "evidence.json").write_text(json.dumps(manifest, indent=2) + "\n")

@@ -4,7 +4,7 @@
 
 ## 无需安装，先体验报告
 
-[交互示例](https://lsh235.github.io/FalutDebugMCP/) · [42 秒演示](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)
+[交互示例](https://lsh235.github.io/FaultDebugMCP/) · [42 秒演示](https://lsh235.github.io/FaultDebugMCP/assets/demo.webm)
 
 查看实际合成测试的正常订单、支付 SIGILL、库存超时，以及 native C SIGSEGV。
 在 Linux x86_64 的本地 Docker Engine 和 Compose 环境中，clone 后运行：
@@ -30,7 +30,7 @@ FaultDebug 用于本地记录和检查 C/C++ 程序的运行时故障证据。�
 
 ## 项目状态
 
-当前候选版本为 [`v1.2.0-rc.1`](https://github.com/lsh235/FalutDebugMCP/releases/tag/v1.2.0-rc.1)。
+当前候选版本为 [`v1.2.0-rc.1`](https://github.com/lsh235/FaultDebugMCP/releases/tag/v1.2.0-rc.1)。
 core 与 gRPC 的本地及 GitHub Actions gate 均已通过，但独立最终审查尚未完成。
 30 分钟 soak trace 丢失了 344,793 个事件，并包含 9,276 条不稳定 snapshot
 记录，因此 trace 不完整。该版本不是正式的 `v1.2.0` 稳定版。
@@ -41,8 +41,8 @@ core 与 gRPC 的本地及 GitHub Actions gate 均已通过，但独立最终审
 Ninja。
 
 ```sh
-git clone https://github.com/lsh235/FalutDebugMCP.git
-cd FalutDebugMCP
+git clone https://github.com/lsh235/FaultDebugMCP.git
+cd FaultDebugMCP
 sudo apt-get update
 sudo apt-get install clang-18 llvm-18-tools cmake ninja-build python3.12 python3.12-venv
 python3.12 -m venv .venv
@@ -54,6 +54,14 @@ cmake -S . -B build -G Ninja \
   -DFAULTDEBUG_PYTHON_EXECUTABLE="$PWD/.venv/bin/python" \
   -DFAULTDEBUG_BUILD_TESTS=ON
 cmake --build build --parallel 2
+```
+
+如果使用 [`uv`](https://docs.astral.sh/uv/)，可以用下面两条命令替换上述
+Python 虚拟环境和安装步骤。apt 安装的 Clang、CMake 等 native 工具仍然需要。
+
+```sh
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -e .
 ```
 
 检查环境并运行正常示例：
@@ -68,6 +76,9 @@ cmake --build build --parallel 2
 ```sh
 .venv/bin/fault-debug run --artifact-dir artifacts -- build/test/fd_signals 11
 ```
+
+只读 Docker MCP 配置见[容器指南](docs/mcp-container.md)；编译和采集仍需在
+具备 native 工具链的环境中执行。
 
 使用 `.venv/bin/fault-debug inspect artifacts/fault-<pid>.fault` 查看 artifact。
 基于 source 的检查需要构建时生成的已验证 source bundle。

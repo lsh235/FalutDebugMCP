@@ -1,13 +1,13 @@
 This is a **development demo snapshot**, not stable v1.2 or v1.3 acceptance.
 
 Try the recorded reports without installing anything:
-https://lsh235.github.io/FalutDebugMCP/
+https://lsh235.github.io/FaultDebugMCP/
 
 On Linux x86_64 with a local Docker Engine and Compose:
 
 ~~~~sh
-git clone https://github.com/lsh235/FalutDebugMCP.git
-cd FalutDebugMCP
+git clone https://github.com/lsh235/FaultDebugMCP.git
+cd FaultDebugMCP
 ./scripts/try-demo.sh
 ~~~~
 

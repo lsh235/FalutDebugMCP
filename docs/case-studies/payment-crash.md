@@ -1,6 +1,6 @@
 # A failed checkout caused by a payment process SIGILL
 
-[Open the recorded report](https://lsh235.github.io/FalutDebugMCP/reports/payment_crash/report.html).
+[Open the recorded report](https://lsh235.github.io/FaultDebugMCP/reports/payment_crash/report.html).
 
 The caller sees HTTP 502. The native RPC endpoints record checkout calling
 payment; the payment receiver's end is missing. The payment capture contains a
@@ -12,5 +12,5 @@ RPC identities and the actual native crash, not the injection configuration.
 The missing receiver end and incomplete native capture remain visible.
 The Python application stack is not captured.
 
-Evidence: [download](https://lsh235.github.io/FalutDebugMCP/downloads/demo-evidence.zip)
-and [manifest](https://lsh235.github.io/FalutDebugMCP/evidence.json).
+Evidence: [download](https://lsh235.github.io/FaultDebugMCP/downloads/demo-evidence.zip)
+and [manifest](https://lsh235.github.io/FaultDebugMCP/evidence.json).

@@ -4,7 +4,7 @@
 
 ## インストール前にレポートを体験
 
-[対話型デモ](https://lsh235.github.io/FalutDebugMCP/) · [42 秒のデモ動画](https://lsh235.github.io/FalutDebugMCP/assets/demo.webm)
+[対話型デモ](https://lsh235.github.io/FaultDebugMCP/) · [42 秒のデモ動画](https://lsh235.github.io/FaultDebugMCP/assets/demo.webm)
 
 実際の合成テストで正常な注文、決済 SIGILL、在庫タイムアウト、native C SIGSEGV を確認できます。
 Linux x86_64 のローカル Docker Engine と Compose があれば、clone 後に実行します：
@@ -31,7 +31,7 @@ Clang/CMake 連携、CLI、読み取り専用 MCP 検査機能も含みます。
 
 ## プロジェクトの状態
 
-現在の候補版は [`v1.2.0-rc.1`](https://github.com/lsh235/FalutDebugMCP/releases/tag/v1.2.0-rc.1)です。
+現在の候補版は [`v1.2.0-rc.1`](https://github.com/lsh235/FaultDebugMCP/releases/tag/v1.2.0-rc.1)です。
 core と gRPC のローカルおよび GitHub Actions のゲートは通過していますが、
 独立した最終レビューは未実施です。30 分間の soak trace は 344,793 件のイベント
 欠落と 9,276 件の不安定な snapshot を記録しており、不完全です。正式な
@@ -43,8 +43,8 @@ core と gRPC のローカルおよび GitHub Actions のゲートは通過し�
 以上、Ninja です。
 
 ```sh
-git clone https://github.com/lsh235/FalutDebugMCP.git
-cd FalutDebugMCP
+git clone https://github.com/lsh235/FaultDebugMCP.git
+cd FaultDebugMCP
 sudo apt-get update
 sudo apt-get install clang-18 llvm-18-tools cmake ninja-build python3.12 python3.12-venv
 python3.12 -m venv .venv
@@ -56,6 +56,15 @@ cmake -S . -B build -G Ninja \
   -DFAULTDEBUG_PYTHON_EXECUTABLE="$PWD/.venv/bin/python" \
   -DFAULTDEBUG_BUILD_TESTS=ON
 cmake --build build --parallel 2
+```
+
+[`uv`](https://docs.astral.sh/uv/) を使う場合は、Python 仮想環境と
+インストール手順を次の 2 コマンドに置き換えられます。apt で入れる Clang、
+CMake などの native ツールは引き続き必要です。
+
+```sh
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -e .
 ```
 
 環境を診断して正常系の fixture を実行します。
@@ -71,6 +80,9 @@ cmake --build build --parallel 2
 ```sh
 .venv/bin/fault-debug run --artifact-dir artifacts -- build/test/fd_signals 11
 ```
+
+読み取り専用 Docker MCP の設定は[コンテナガイド](docs/mcp-container.md)を
+参照してください。native のビルドと記録には別途ツールチェーンが必要です。
 
 `.venv/bin/fault-debug inspect artifacts/fault-<pid>.fault` で artifact を確認
 できます。source に基づく検査には、ビルド時に生成した検証済み source bundle
