@@ -2,7 +2,7 @@
 
 작성일: **2026-10-11, Asia/Seoul**.
 기준 revision: `70d6771386a97778bdad167c6508827d6c1d56b4`.
-상태: **IN PROGRESS — P0-01 완료, P0-02 로컬 profile PASS, 최종 수락 pending**.
+상태: **IN PROGRESS — P0-01 완료, P0-02 로컬·hosted gate PASS, 최종 수락 pending**.
 v1.3은 제안 버전명이며, 현재 패키지는 `1.2.0rc1`이다.
 
 ## 1. 목표와 출발 조건
@@ -41,7 +41,7 @@ Docker lab 변경이 추가되었으므로 이전 RC의 PASS를 현재 소스의
 ## 3. 작업 목록과 수락 기준
 
 아래 담당은 작업 책임 영역이며 실제 인원 배정이 아니다. P0-01의 구현과 로컬 검증은
-[P0 결과](v1.3-p0-01.md)에 기록했다. P0-02는 로컬 gate PASS, hosted/최종 수락 pending이며
+[P0 결과](v1.3-p0-01.md)에 기록했다. P0-02는 로컬·hosted gate PASS, 최종 수락 pending이며
 그 밖의 항목은 PLANNED다.
 P0-01의 `test/thread_generation_contract.py`와 native fixture는 구현되었다.
 나머지 계획에서 “신규”를 붙인 항목은 아직 존재하지 않는다.

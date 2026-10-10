@@ -50,8 +50,8 @@ not completed features or a stable-release declaration.
 
 1. **P0-01 implemented and locally verified:** generation event counters, explicit
    retired-history limitations, and 18 native oracle cases; core/gRPC and Docker
-   regressions pass. [Implementation evidence](docs/v1.3-p0-01.md) records the
-   current-source results. Hosted revalidation, fresh soak, and final stable
+   regressions pass locally and on GitHub. [Implementation evidence](docs/v1.3-p0-01.md) records the
+   current-source results. Fresh soak and final stable
    acceptance remain pending.
 2. Preserve full trace IDs and define W3C HTTP context, process/container generation,
    and clock-domain contracts while retaining numeric ABI compatibility.
