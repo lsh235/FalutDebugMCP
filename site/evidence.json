@@ -61,7 +61,7 @@
     },
     {
       "path": "assets/style.css",
-      "sha256": "140c9698cf773cc9799038c29edaec8928b497b8a520c575c9cbf46d33fb08d7"
+      "sha256": "cdb3da07c5990ad07eb611c175526d8cc99c75cfe9d266f328a88e1ecc1ecf17"
     },
     {
       "path": "downloads/c-sigsegv-evidence.zip",
@@ -77,7 +77,7 @@
     },
     {
       "path": "reports/c-sigsegv/report.html",
-      "sha256": "2b2abe583b7eb6046147630ddbd50c9620f2d80039a05f9acb7e316775822a87"
+      "sha256": "c898ca8f136d3e36c149f163bceeddcc04bcff95399e8adfd45fa9406bfc0e9f"
     },
     {
       "path": "reports/c-sigsegv/report.json",
@@ -89,7 +89,7 @@
     },
     {
       "path": "reports/inventory_timeout/report.html",
-      "sha256": "00a276c588ed960979e7707fa1688d1baf18fa97e54e6cb523aeb47ba919a9a4"
+      "sha256": "81e85e653b40507de52e6f7d899462ed4a3a1845d8cdd063c4b4b11174c96a42"
     },
     {
       "path": "reports/inventory_timeout/report.json",
@@ -105,7 +105,7 @@
     },
     {
       "path": "reports/payment_crash/fault-6/report.html",
-      "sha256": "d8de15cbe9d279a1dad639443f405cba9c403860c50b1e90cc05868df0965b9e"
+      "sha256": "e301a9e33c72798d43dcc905f50a53625d79a95d0ccdba7aa6bc5d68f81c8b00"
     },
     {
       "path": "reports/payment_crash/fault-6/report.json",
@@ -121,7 +121,7 @@
     },
     {
       "path": "reports/payment_crash/report.html",
-      "sha256": "15ef43d37e002063a66ca34059330384323aff867d6c1b8b8be78e014accfba7"
+      "sha256": "b4e63c022a31221bc85989a17848523ec709022c34535f5dca5a2079ec7638b3"
     },
     {
       "path": "reports/payment_crash/report.json",
@@ -137,7 +137,7 @@
     },
     {
       "path": "reports/success/report.html",
-      "sha256": "10393de223c19967195d7f1ac82569cada049b6b32a8dbebcc51a72058ae11a4"
+      "sha256": "189afab7ca6a513a615a11dc6fb765e9b5fa13817dcb6607d43f5c25d3eddc89"
     },
     {
       "path": "reports/success/report.json",

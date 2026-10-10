@@ -13,6 +13,10 @@ Date: 2026-10-11, Asia/Seoul. Publication checks are updated after deployment.
 - PASS: Pages package verifies 29 file hashes and local HTML links.
 - PASS: browser video decode/playback, duration 42 seconds.
 - PASS: mobile width 390 without page overflow; English/Korean navigation, keyboard node selection and light theme.
+- PASS: [Impeccable 0.1.14 UI scan](https://github.com/pbakaus/impeccable/tree/d631a8827f99414d2b6daba4ef08b7f8701751d7)
+  found print-link contrast and undersized print-table text; print colors and
+  table type were corrected. Five remaining section-label findings are
+  intentional navigation cues.
 - PASS: new native C capture has SIGSEGV, collector.ok=true, snapshot stable=true and trace.complete=false; matching-source report verifies a crash location.
 
 The initial analyzer-container experiment failed because its loopback was isolated
