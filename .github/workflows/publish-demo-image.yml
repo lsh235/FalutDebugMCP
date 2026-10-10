@@ -12,6 +12,12 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
+      - name: Refuse to overwrite an existing demo release
+        run: |
+          if gh release view "$DEMO_TAG" >/dev/null 2>&1; then
+            echo "Demo release already exists. Choose a new snapshot tag before publishing." >&2
+            exit 1
+          fi
       - name: Build demo image
         run: |
           docker build -f test/shop/Dockerfile \
@@ -41,4 +47,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: prebuilt-demo-fixture-evidence
-          path: build/demo-*/
+          path: build/demo-20*/

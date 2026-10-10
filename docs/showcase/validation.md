@@ -25,8 +25,32 @@ The curated public synthetic evidence is explicitly packaged under site/download
 
 ## Public checks
 
-Pages deployment, public report URLs, anonymous image-archive download and
-the hosted newcomer command are pending until the workflow results are inspected.
+The tested implementation revision is
+4ab393f3588034e3e85d3faa13cd5cddca10330c. Later validation-document and
+publisher guard/artifact-path changes are separate from these executed results.
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| General GitHub CI | PASS | [38075216287](https://github.com/lsh235/FalutDebugMCP/actions/runs/38075216287) |
+| Pages deployment | PASS | [38075216591](https://github.com/lsh235/FalutDebugMCP/actions/runs/38075216591) |
+| Hosted prebuilt image/newcomer script | PASS, three scenarios | [38075238008](https://github.com/lsh235/FalutDebugMCP/actions/runs/38075238008) |
+| Public files | PASS | Nine live HTML/video/evidence-download files matched committed SHA-256 |
+| Public browser path | PASS | Landing → service report → native crash; Build ID verified and limited evidence visible |
+| Anonymous image download | PASS | Actual script download, SHA256SUMS validation, Docker load and local fixture execution |
+| Loaded public image | PASS | Source revision label matches 4ab393f; 24 stable captures, 23 complete; intentional crash stays incomplete |
+| Local report server after download | PASS | http://127.0.0.1:18873/index.html |
+
+[Published demo snapshot](https://github.com/lsh235/FalutDebugMCP/releases/tag/demo-2026-10-11)
+is a prerelease, explicitly separate from native stable acceptance.
+Its Docker image archive is 292,547,825 bytes. Loaded image ID:
+sha256:e377381c3e2cf0480e4f7e5194696f3689c63cf774105706cbdcb87afab484bc.
+
+One initial public native-report navigation received GitHub's HTTP 503 page.
+Subsequent requests returned 200; byte hashes and real browser navigation were
+rechecked. This was not recorded as a successful initial navigation.
+
+Local delivery evidence: build/showcase-public-hash-check.json,
+build/showcase-anonymous-summary.json and screenshots under build/showcase-*.
 
 ## Community and publication scope
 
