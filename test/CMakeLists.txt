@@ -16,6 +16,8 @@ add_executable(fd_signals programs/signals/main.c)
 add_executable(fd_threads programs/multithread/main.c)
 add_executable(fd_wrap programs/wrap/main.c)
 add_executable(fd_slot_reuse programs/thread_slot_reuse/main.c)
+add_executable(fd_thread_generation programs/thread_generation/main.c)
+target_link_libraries(fd_thread_generation PRIVATE pthread)
 add_library(fd_startup_module SHARED programs/pie_dso/startup_module.c)
 add_executable(fd_pie_dso programs/pie_dso/main.c)
 add_executable(fd_soak programs/soak/main.c)
@@ -56,6 +58,10 @@ if(UNIX AND NOT APPLE)
   add_test(NAME fd_python_decoder_capacity
     COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/decoder_capacity.py"
       $<TARGET_FILE:fd_threads>)
+  add_test(NAME fd_python_thread_generation
+    COMMAND ${FAULTDEBUG_VALIDATION_PYTHON} "${CMAKE_CURRENT_SOURCE_DIR}/thread_generation_contract.py"
+      --binary $<TARGET_FILE:fd_thread_generation>
+      --output "${CMAKE_CURRENT_BINARY_DIR}/thread-generation.json")
   add_test(NAME fd_python_doctor_benchmark
     COMMAND ${FAULTDEBUG_VALIDATION_PYTHON} "${CMAKE_CURRENT_SOURCE_DIR}/doctor_benchmark.py"
       --build-dir "${CMAKE_BINARY_DIR}" --require-runtime-smoke)
@@ -105,7 +111,7 @@ if(FAULTDEBUG_SOURCE_MANIFEST)
   faultdebug_add_provenance(fd_startup_module "${FAULTDEBUG_SOURCE_MANIFEST}")
 endif()
 
-foreach(t fd_c_chain fd_cpp_chain fd_recursion fd_signals fd_threads fd_wrap fd_slot_reuse fd_pie_dso fd_soak fd_branch fd_exceptions fd_stack_exhaust fd_simultaneous fd_complex fd_process_timeline fd_rpc_emit_fault fd_snapshot_stress fd_rpc_scope_probe)
+foreach(t fd_c_chain fd_cpp_chain fd_recursion fd_signals fd_threads fd_wrap fd_slot_reuse fd_thread_generation fd_pie_dso fd_soak fd_branch fd_exceptions fd_stack_exhaust fd_simultaneous fd_complex fd_process_timeline fd_rpc_emit_fault fd_snapshot_stress fd_rpc_scope_probe)
   faultdebug_instrument(${t})
   target_link_options(${t} PRIVATE -pie)
 endforeach()

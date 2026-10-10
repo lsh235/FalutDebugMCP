@@ -123,7 +123,16 @@ static int FD_NI fd_register_thread(void) {
   for (uint32_t i = 0; i < limit; ++i) {
     uint64_t empty = 0;
     /* Reserve without exposing a new TID with the previous generation. */
-    if (__atomic_compare_exchange_n(&fd_map->threads[i].header.tid, &empty, UINT64_MAX, 0, __ATOMIC_ACQ_REL, __ATOMIC_RELAXED)) { slot = i; break; }
+    if (__atomic_compare_exchange_n(&fd_map->threads[i].header.tid, &empty, UINT64_MAX, 0, __ATOMIC_ACQ_REL, __ATOMIC_RELAXED)) {
+      /* Never alias an old generation by wrapping the uint32 identity. */
+      if (fd_map->threads[i].header.generation == UINT32_MAX) {
+        fd_publish_status(FD_STATUS_PARTIAL | FD_STATUS_THREAD_OVERFLOW);
+        __atomic_store_n(&fd_map->threads[i].header.tid, 0, __ATOMIC_RELEASE);
+        continue;
+      }
+      slot = i;
+      break;
+    }
   }
   if (slot == UINT32_MAX) {
     fd_publish_status(FD_STATUS_THREAD_OVERFLOW);
@@ -131,6 +140,16 @@ static int FD_NI fd_register_thread(void) {
   }
   fd_tls.slot = slot; fd_tls.generation = 1; fd_tls.sequence = 0; fd_tls.registered = 1;
   struct fd_thread_ring *ring = &fd_map->threads[slot];
+  if (ring->header.generation != 0) {
+    /* Old-generation rows have no surviving TID and are not reportable.
+     * Disclose their retirement before publishing the replacement identity. */
+    fd_publish_status(FD_STATUS_PARTIAL);
+    __atomic_fetch_or(&ring->header.flags, FD_THREAD_HISTORY_RETIRED, __ATOMIC_RELEASE);
+  }
+  __atomic_fetch_or(&ring->header.flags, FD_THREAD_GENERATION_COUNT, __ATOMIC_RELEASE);
+  __atomic_store_n(&ring->header.event_count, 0, __ATOMIC_RELEASE);
+  /* Preserve dropped_count: it includes evictions in retired generations.
+   * Old event slots remain tagged with their old generation and are ignored. */
   ring->header.generation += 1; fd_tls.generation = ring->header.generation;
   ring->header.event_capacity = fd_map->header.event_capacity;
   stack_t ss = { .ss_sp = fd_altstack_mem[slot], .ss_size = FD_ALTSTACK_SIZE, .ss_flags = 0 };

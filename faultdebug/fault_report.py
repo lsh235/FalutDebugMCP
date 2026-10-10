@@ -15,7 +15,7 @@ import tempfile
 
 from .artifact import read_artifact
 from .bundle import SourceBundle, load_bundle
-from .format import STATUS_DATA_LOSS, STATUS_PARTIAL
+from .format import STATUS_DATA_LOSS, STATUS_PARTIAL, THREAD_HISTORY_RETIRED
 from .inspect import diagnose, resolve_addresses, verified_function_source
 
 
@@ -66,7 +66,7 @@ def build_fault_report(capture: dict, *, bundle: SourceBundle | str | None = Non
             raise ValueError("thread must be an object")
         for key in ("tid", "generation"):
             _uint(thread.get(key), f"thread.{key}")
-        for key in ("slot", "dropped_count"):
+        for key in ("slot", "dropped_count", "flags"):
             _uint(thread.get(key, 0), f"thread.{key}")
         for event in thread.get("events", []):
             if not isinstance(event, dict):
@@ -161,6 +161,9 @@ def build_fault_report(capture: dict, *, bundle: SourceBundle | str | None = Non
                      for a, b in zip(shown, shown[1:]) if not b["gaps_before"])
         if thread.get("dropped_count", 0):
             local_gaps.append({"thread": key, "reason": "dropped_records", "count": thread["dropped_count"]})
+        if thread.get("flags", 0) & THREAD_HISTORY_RETIRED:
+            local_gaps.append({"thread": key, "reason": "retired_thread_generations",
+                               "count": max(0, generation - 1), "retired_event_count": None})
         if identities.count((tid, generation)) != 1:
             local_gaps.append({"thread": key, "reason": "ambiguous_thread_identity"})
         gaps.extend(local_gaps)

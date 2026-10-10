@@ -49,6 +49,13 @@ enum fd_event_type {
     FD_EVENT_OVERFLOW = 5
 };
 
+/* Additive ABI v1 thread flags; no layout/offset changes.  Old readers still
+ * see FD_STATUS_PARTIAL when a previous generation has been retired. */
+enum fd_thread_flags {
+    FD_THREAD_GENERATION_COUNT = UINT32_C(1) << 0,
+    FD_THREAD_HISTORY_RETIRED = UINT32_C(1) << 1
+};
+
 enum fd_rpc_direction {
     FD_RPC_DIRECTION_INBOUND = 1,
     FD_RPC_DIRECTION_OUTBOUND = 2
@@ -86,8 +93,8 @@ struct fd_thread_header {
     uint64_t tid;
     uint32_t generation;
     uint32_t flags;
-    uint64_t event_count;
-    uint64_t dropped_count;
+    uint64_t event_count; /* current generation if FD_THREAD_GENERATION_COUNT */
+    uint64_t dropped_count; /* cumulative within-generation evictions for slot */
     uint32_t event_capacity;
     uint32_t reserved;
 };

@@ -113,6 +113,41 @@ def check_rpc_rewrite() -> None:
                for row in report["snapshot_consistency"]["unstable_records"])
 
 
+def check_generation_aba() -> None:
+    buf, offset, _ = make_mapping()
+    original = fmt._sequence_u64
+    injected = False
+
+    def replace_generation(data, position):
+        nonlocal injected
+        value = original(data, position)
+        if position == offset and not injected:
+            injected = True
+            # Same publication and sequence, but a different generation.
+            fmt.struct.pack_into("<I", data, offset + 36, 2)
+        return value
+
+    fmt._sequence_u64 = replace_generation
+    try:
+        record, state = fmt._read_stable_record(buf, offset, fmt.EVENT.size, 40,
+                                               generation_offset=36)
+    finally:
+        fmt._sequence_u64 = original
+    assert injected and record is None and state == "changed_during_read"
+
+
+def check_retirement_without_status() -> None:
+    buf, offset, _ = make_mapping()
+    fmt.struct.pack_into("<I", buf, fmt.HEADER.size + 8, 2)
+    fmt.struct.pack_into("<I", buf, fmt.HEADER.size + 12,
+                         fmt.THREAD_GENERATION_COUNT | fmt.THREAD_HISTORY_RETIRED)
+    fmt.struct.pack_into("<I", buf, offset + 36, 2)
+    report = fmt.collect_mapping(buf)
+    assert report["snapshot_consistency"]["stable"] is True
+    assert report["complete"] is False, "retired history was called complete without PARTIAL"
+    assert report["threads"][0]["retention"]["retired_generations"] == 1
+
+
 def main() -> int:
     stable, _, _ = make_mapping()
     stable_report = fmt.collect_mapping(stable)
@@ -131,6 +166,8 @@ def main() -> int:
                for row in in_progress["snapshot_consistency"]["unstable_records"])
     check_event_rewrite()
     check_rpc_rewrite()
+    check_generation_aba()
+    check_retirement_without_status()
     print("snapshot-consistency-contract: PASS")
     return 0
 

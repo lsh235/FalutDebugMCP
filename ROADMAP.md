@@ -34,9 +34,37 @@ Planning, baseline, P1, P2-01/02/03, and the local P3 profiles and soak are comp
 The `v1.2.0-rc.1` candidate is published. Independent review and full v1.2.0
 release acceptance remain pending. Implementation reports are linked from
 [the v1.2 plan](docs/next-version-v1.2.md).
-Dynamic-module lifecycle tracking,
-automatic RPC interceptors, remote collection, and a separate visualization
-UI are later workstreams.
+Standalone fault-flow and service-flow reports and the Docker shopping laboratory
+are now implemented; their current scope and local validation are documented in
+[the shopping validation report](docs/shopping-fault-lab.validation.md).
+Dynamic-module lifecycle tracking, automatic general-purpose RPC interceptors,
+remote collection, and a continuous live visualization UI remain later workstreams.
+
+## Researched candidate after v1.2 acceptance: v1.3
+
+Research dated **2026-10-11**, based on revision `70d6771`, is in
+[the research dossier](docs/next-version-research-2026-10-11.md). The proposed
+work items, dependencies, evidence contracts, and acceptance matrix are in
+[the v1.3 candidate plan](docs/next-version-v1.3.md). These are planned work,
+not completed features or a stable-release declaration.
+
+1. **P0-01 implemented and locally verified:** generation event counters, explicit
+   retired-history limitations, and 18 native oracle cases; core/gRPC and Docker
+   regressions pass. [Implementation evidence](docs/v1.3-p0-01.md) records the
+   current-source results. Hosted revalidation, fresh soak, and final stable
+   acceptance remain pending.
+2. Preserve full trace IDs and define W3C HTTP context, process/container generation,
+   and clock-domain contracts while retaining numeric ABI compatibility.
+3. Add real TCP fault injection and restart/retry state oracles to the Docker lab;
+   generalize the offline report and expose bounded read-only MCP service-flow queries.
+4. Validate N=32 and local kind Kubernetes lifecycle/export, followed by current-source
+   scale, shopping soak, packaging, hosted gates, and RC acceptance.
+5. Evaluate a pinned OpenTelemetry Demo integration as a separate experimental profile.
+   Chaos Mesh and a general remote agent are not prerequisites for the initial work.
+
+The source/runtime generation concern is distinct from the small-capacity decoder
+stride bug already fixed in v1.2. Local kind nodes do not establish multi-host support.
+Current Docker N=8/16 results do not establish Kubernetes, N=32, or shopping-soak results.
 
 ## Stage 1 complete in v0.1.0
 

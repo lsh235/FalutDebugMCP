@@ -26,6 +26,8 @@ STATUS_EVENT_OVERFLOW = 1 << 3
 STATUS_THREAD_OVERFLOW = 1 << 4
 STATUS_MODULE_OVERFLOW = 1 << 5
 STATUS_PARTIAL = 1 << 9
+THREAD_GENERATION_COUNT = 1 << 0
+THREAD_HISTORY_RETIRED = 1 << 1
 STATUS_DATA_LOSS = STATUS_EVENT_OVERFLOW | STATUS_THREAD_OVERFLOW | STATUS_MODULE_OVERFLOW
 HEADER = struct.Struct("<IHHIIIIIIQQQQIIII")
 THREAD = struct.Struct("<QIIQQII")
@@ -95,15 +97,23 @@ def _sequence_u64(buf: bytes | mmap.mmap, offset: int) -> int:
 
 
 def _read_stable_record(buf: bytes | mmap.mmap, offset: int, size: int,
-                        publication_offset: int, identity_offset: int = 0) -> tuple[bytes | None, str]:
+                        publication_offset: int, identity_offset: int = 0,
+                        generation_offset: int | None = None) -> tuple[bytes | None, str]:
     """Copy a committed record only when its publication and sequence stay stable."""
     if not _published(buf, offset + publication_offset):
         return None, "unpublished"
+    generation_before = (struct.unpack_from("<I", buf, offset + generation_offset)[0]
+                         if generation_offset is not None else None)
     sequence_before = _sequence_u64(buf, offset + identity_offset)
     record = bytes(buf[offset:offset + size])
     published_after = _published(buf, offset + publication_offset)
     sequence_after = _sequence_u64(buf, offset + identity_offset)
     sequence_copy = struct.unpack_from("<Q", record, identity_offset)[0]
+    if generation_offset is not None:
+        generation_copy = struct.unpack_from("<I", record, generation_offset)[0]
+        generation_after = struct.unpack_from("<I", buf, offset + generation_offset)[0]
+        if generation_before != generation_copy or generation_copy != generation_after:
+            return None, "changed_during_read"
     if not published_after or sequence_before != sequence_copy or sequence_copy != sequence_after:
         return None, "changed_during_read"
     return record, "stable"
@@ -194,7 +204,7 @@ def collect_mapping(buf: bytes | mmap.mmap) -> dict:
         events = []
         for j in range(capacity):
             eo = off + THREAD.size + j * EVENT.size
-            record, state = _read_stable_record(buf, eo, EVENT.size, 40)
+            record, state = _read_stable_record(buf, eo, EVENT.size, 40, generation_offset=36)
             expected = count >= capacity or j < count
             if record is None:
                 if state == "changed_during_read" or expected:
@@ -214,7 +224,17 @@ def collect_mapping(buf: bytes | mmap.mmap) -> dict:
         # their per-thread sequence while retaining drops/instability above.
         events.sort(key=lambda event: int(event["sequence"]))
         if tid or generation or events or dropped:
-            threads.append({"slot": i, "tid": tid, "generation": generation, "flags": flags, "event_count": count, "dropped_count": dropped, "events": events})
+            thread = {"slot": i, "tid": tid, "generation": generation, "flags": flags,
+                      "event_count": count, "dropped_count": dropped, "events": events}
+            if flags & THREAD_GENERATION_COUNT:
+                thread["retention"] = {
+                    "scope": "current_thread_generation",
+                    "event_count_scope": "current_generation",
+                    "dropped_count_scope": "slot_lifetime",
+                    "retired_generations": max(0, generation - 1) if flags & THREAD_HISTORY_RETIRED else 0,
+                    "retired_event_count": None,
+                }
+            threads.append(thread)
     modules = []
     for i in range(h.module_capacity):
         off = h.modules_offset + i * MODULE.size
@@ -244,9 +264,10 @@ def collect_mapping(buf: bytes | mmap.mmap) -> dict:
         unstable_records.append({"kind": "shared_header", "reason": "status_changed_during_read"})
     snapshot_consistency = {"stable": not unstable_records, "unstable_records": unstable_records}
     rpc_complete = rpc is None or bool(rpc["complete"])
+    retired_history = any(thread["flags"] & THREAD_HISTORY_RETIRED for thread in threads)
     report = {"header": h.__dict__, "threads": threads, "modules": modules, "crashes": crashes,
               "complete": not bool(h.status & (STATUS_PARTIAL | STATUS_DATA_LOSS)) and
-                          not unstable_records and rpc_complete,
+                          not unstable_records and rpc_complete and not retired_history,
               "snapshot_consistency": snapshot_consistency}
     if rpc is not None:
         report["rpc"] = rpc

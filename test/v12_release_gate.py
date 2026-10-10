@@ -258,8 +258,10 @@ def _wheel_consumer(ns: argparse.Namespace, work: Path, build_dir: Path) -> dict
     env["PYTHONPATH"] = os.pathsep.join([str(wheel_site), *dependency_paths])
     env["PATH"] = str(executable.parent) + os.pathsep + env.get("PATH", "")
     env["FAULTDEBUG_RUNTIME_DIR"] = str(build_dir)
-    env["FAULTDEBUG_REAL_CC"] = shutil.which("clang-18") or shutil.which("clang") or "clang"
-    env["FAULTDEBUG_REAL_CXX"] = shutil.which("clang++-18") or shutil.which("clang++") or "clang++"
+    # Exercise the same configured compilers as the native build, including
+    # explicit toolchain paths unavailable on the host's default PATH.
+    env["FAULTDEBUG_REAL_CC"] = ns.cc
+    env["FAULTDEBUG_REAL_CXX"] = ns.cxx
     import_result = _run([str(python), "-c", "import faultdebug; print(faultdebug.__file__); print(faultdebug.__version__)"],
                          cwd=consumer, env=env, timeout=30)
     package_path = Path(import_result.get("stdout_tail", "").splitlines()[0]).resolve() if import_result.get("stdout_tail") else None

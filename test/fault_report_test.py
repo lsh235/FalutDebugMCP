@@ -30,6 +30,17 @@ def capture():
 
 
 class FaultReportTests(unittest.TestCase):
+    def test_retired_history_is_separate_from_ring_drops(self):
+        raw = capture()
+        raw["threads"][0]["flags"] = 3
+        model = build_fault_report(raw)
+        retirement = [g for g in model["gaps"] if g.get("reason") == "retired_thread_generations"]
+        self.assertEqual(len(retirement), 1)
+        self.assertEqual(retirement[0]["count"], 1)
+        self.assertIsNone(retirement[0]["retired_event_count"])
+        self.assertEqual(model["capture"]["evidence_status"], "limited")
+        self.assertFalse(any(g.get("reason") == "dropped_records" for g in model["gaps"]))
+
     def test_observed_nesting_and_fault_context_are_distinct(self):
         model = build_fault_report(capture())
         self.assertIn({"from": "thread-0-event-0", "to": "thread-0-event-1", "kind": "observed_nesting"}, model["edges"])

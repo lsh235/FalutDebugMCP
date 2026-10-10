@@ -41,6 +41,32 @@ listed in the report's additive `snapshot_consistency.unstable_records` field. T
 report is then marked `complete=false`. This gives per-record consistency, not a
 single atomic cut of all rows in a live process.
 
+## Thread generation retention
+
+Two additive `fd_thread_header.flags` bits define the generation contract without
+changing ABI v1 sizes or offsets:
+
+- `FD_THREAD_GENERATION_COUNT` (bit 0): `event_count` and event sequences refer to
+  the current generation and restart at zero when a slot is reused.
+- `FD_THREAD_HISTORY_RETIRED` (bit 1): a previous thread generation occupied this
+  slot. Its historical events and TID are unavailable; `FD_STATUS_PARTIAL` remains
+  set for older readers, so a stable snapshot does not imply complete history.
+
+`dropped_count` remains cumulative within the slot across generations and counts
+within-generation ring evictions. It must not be reset to hide an earlier overflow.
+Retired history is a separate limitation, not an additional numeric drop total;
+the number of retired events is unknown. Decoder `threads[].retention` documents
+these scopes and `retired_generations`, with `retired_event_count=null`.
+Legacy rows without bit 0 keep their original counters and have no inferred scope.
+
+Registration reserves the TID sentinel while counters, generation and flags are
+updated. Old event slots remain tagged with their previous generation and are
+excluded. Event copies compare generation as well as publication and sequence to
+reject a same-sequence replacement during a live read. Generation exhaustion at
+`UINT32_MAX` discloses thread overflow/partial rather than wrapping to an old identity.
+TID zero still denotes a released slot; no former TID is reconstructed. Native crash
+records match the registered live TID and generation before thread teardown.
+
 ## Optional RPC semantic sidecar
 
 ABI v1 remains valid without semantic events. A v0.4 launcher may reserve an
